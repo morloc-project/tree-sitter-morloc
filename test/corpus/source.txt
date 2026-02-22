@@ -1,6 +1,6 @@
 ==============================
 source nothing
-===============================
+==============================
 
 source Py ()
 
@@ -8,12 +8,12 @@ source Py ()
 
 (source_file
   (source
-    (language)))
-
+    (language
+      (identifierU))))
 
 ==============================
 source from builtins
-===============================
+==============================
 
 source Py ("map" as m, "sum")
 
@@ -21,13 +21,13 @@ source Py ("map" as m, "sum")
 
 (source_file
   (source
-    (language)
+    (language
+      (identifierU))
     (sourceTerm
       name: (string)
       alias: (identifier))
     (sourceTerm
       name: (string))))
-
 
 ===============================
 source from file
@@ -39,7 +39,8 @@ source Py from "foo.py" ("foo")
 
 (source_file
   (source
-    (language)
+    (language
+      (identifierU))
     sourceFile: (string)
     (sourceTerm
       name: (string))))
@@ -52,10 +53,60 @@ source Py from "foo.py" ("PersonObj" as Person)
 
 ---
 
-    (source_file
-      (source
-        (language)
-        (string)
-        (sourceTerm
-          (string)
-          (identifierU))))
+(source_file
+  (source
+    (language
+      (identifierU))
+    (string)
+    (sourceTerm
+      (string)
+      (identifierU))))
+
+===============================
+source lowercase language
+===============================
+
+source py from "foo.py" ("foo")
+
+---
+
+(source_file
+  (source
+    (language
+      (identifier))
+    sourceFile: (string)
+    (sourceTerm
+      name: (string))))
+
+===============================
+source WHERE form
+===============================
+
+source Py where
+  foo
+  bar
+
+---
+
+(source_file
+  (source
+    (language
+      (identifierU))
+    name: (identifier)
+    name: (identifier)))
+
+===============================
+source operator alias
+===============================
+
+source Py ("add" as (+))
+
+---
+
+(source_file
+  (source
+    (language
+      (identifierU))
+    (sourceTerm
+      name: (string)
+      alias: (operator))))

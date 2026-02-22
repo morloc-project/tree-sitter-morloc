@@ -1,0 +1,256 @@
+==============================
+force expression
+==============================
+
+x = !y
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (identifier))))
+
+==============================
+suspend expression
+==============================
+
+x = {y}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (suspendExpr
+      (identifier))))
+
+==============================
+hole expression
+==============================
+
+x = _
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (holeExpr)))
+
+==============================
+unit expression
+==============================
+
+x = ()
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (unitExpr)))
+
+==============================
+negative integer
+==============================
+
+x = -42
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (negativeExpr
+      (integer))))
+
+==============================
+negative float
+==============================
+
+x = -3.14
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (negativeExpr
+      (float))))
+
+==============================
+operator section
+==============================
+
+x = (+)
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (operatorSection
+      (operator))))
+
+==============================
+minus section
+==============================
+
+x = (-)
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (operatorSection)))
+
+==============================
+dot section
+==============================
+
+x = (.)
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (operatorSection)))
+
+==============================
+force and suspend nested
+==============================
+
+x = !{42}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (suspendExpr
+        (integer)))))
+
+==============================
+let expression
+==============================
+
+x = let a = 5 in a
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (letExpr
+      (letBinding
+        (identifier)
+        (integer))
+      (identifier))))
+
+==============================
+sequential let bindings
+==============================
+
+x = let a = 1 let b = 2 in a
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (letExpr
+      (letBinding
+        (identifier)
+        (integer))
+      (letBinding
+        (identifier)
+        (integer))
+      (identifier))))
+
+==============================
+let with hole binding
+==============================
+
+x = let _ = foo in bar
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (letExpr
+      (letBinding
+        (identifier))
+      (identifier))))
+
+==============================
+type annotation
+==============================
+
+x = foo :: Int
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (typeAnnotation
+      (identifier)
+      concrete: (identifierU))))
+
+==============================
+hex integer
+==============================
+
+x = 0xFF
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (integer)))
+
+==============================
+octal integer
+==============================
+
+x = 0o77
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (integer)))
+
+==============================
+binary integer
+==============================
+
+x = 0b1010
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (integer)))
+
+==============================
+scientific float
+==============================
+
+x = 1e10
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (float)))

@@ -1,6 +1,6 @@
 ==============================
 no imported values
-===============================
+==============================
 
 import foo ()
 
@@ -9,8 +9,8 @@ import foo ()
 (source_file
   (import
     modulePath: (modulePath
-      segment: (identifier))))
-
+      segment: (moduleComponent
+        (identifier)))))
 
 ===============================
 universal import
@@ -23,8 +23,8 @@ import foo
 (source_file
   (import
     modulePath: (modulePath
-      segment: (identifier))))
-
+      segment: (moduleComponent
+        (identifier)))))
 
 ===============================
 specific values
@@ -37,13 +37,13 @@ import foo (a, b as c)
 (source_file
   (import
     modulePath: (modulePath
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (importTerm
       term: (identifier))
     (importTerm
       term: (identifier)
       alias: (identifier))))
-
 
 ===============================
 specific types
@@ -56,12 +56,12 @@ import foo (Int, x)
 (source_file
   (import
     modulePath: (modulePath
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (importTerm
       type: (identifierU))
     (importTerm
       term: (identifier))))
-
 
 ===============================
 module paths
@@ -76,19 +76,45 @@ import lib.foo.bar (f)
 (source_file
   (import
     modulePath: (modulePath
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (importTerm
       type: (identifierU)))
   (import
     modulePath: (modulePath
-      segment: (identifier)
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (importTerm
       type: (identifierU)))
   (import
     modulePath: (modulePath
-      segment: (identifier)
-      segment: (identifier)
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (importTerm
       term: (identifier))))
+
+===============================
+operator import
+===============================
+
+import foo ((+) as add, (-))
+
+---
+
+(source_file
+  (import
+    modulePath: (modulePath
+      segment: (moduleComponent
+        (identifier)))
+    (importTerm
+      (operatorImport
+        (operator)
+        alias: (identifier)))
+    (importTerm
+      (operatorImport))))

@@ -21,7 +21,6 @@ type Foo a b = big:Bar a small:b
         (tag)
         generic: (identifier)))))
 
-
 ===============================
 type Cpp => Foo a b = big:Bar a small:b
 ===============================
@@ -32,7 +31,8 @@ type Cpp => Foo a b = big:Bar a small:b
 
 (source_file
   (typedef
-    (language)
+    (language
+      (identifierU))
     (paramT
       concrete: (identifierU)
       generic: (identifier)
@@ -45,7 +45,6 @@ type Cpp => Foo a b = big:Bar a small:b
       (taggedType
         (tag)
         generic: (identifier)))))
-
 
 ===============================
 parameterized types and sugar
@@ -74,7 +73,6 @@ type Foo b = (A [T] c, b c, [(Int, Bar)])
           concrete: (identifierU)
           concrete: (identifierU))))))
 
-
 ===============================
 Native typedef
 ===============================
@@ -85,10 +83,10 @@ type Cpp => A = "B"
 
 (source_file
   (typedef
-    (language)
+    (language
+      (identifierU))
     concrete: (identifierU)
     native: (string)))
-
 
 ===============================
 Parameterized native typedef
@@ -100,13 +98,13 @@ type Cpp => A a = "B" a
 
 (source_file
   (typedef
-    (language)
+    (language
+      (identifierU))
     (paramT
       concrete: (identifierU)
       generic: (identifier))
     native: (string)
     generic: (identifier)))
-
 
 ===============================
 Parameterized record definition
@@ -129,8 +127,6 @@ record (Person a) = Person {name :: Str, info :: a}
       key: (identifier)
       generic: (identifier))))
 
-
-
 ===============================
 Parameterized table definition
 ===============================
@@ -151,8 +147,6 @@ table (Person a) = Person {name :: Str, info :: a}
     entry: (recordTypeEntry
       key: (identifier)
       generic: (identifier))))
-
-
 
 ===============================
 Parameterized object definition
@@ -175,8 +169,6 @@ object (Person a) = Person {name :: Str, info :: a}
       key: (identifier)
       generic: (identifier))))
 
-
-
 ===============================
 Unparameterized record definition
 ===============================
@@ -197,7 +189,6 @@ record Person = Person {name :: Str, info :: [Int]}
       key: (identifier)
       value: (listType
         concrete: (identifierU)))))
-
 
 ===============================
 Parameterized concrete record definition
@@ -222,11 +213,11 @@ record Cpp => (Person a) = "person_t"
       generic: (identifier)))
   (recdef
     (recordDef)
-    (language)
+    (language
+      (identifierU))
     name: (identifierU)
     param: (identifier)
     constructor: (string)))
-
 
 ===============================
 Unparameterized concrete record definition
@@ -251,7 +242,61 @@ record cpp => Person = "person_t"
         concrete: (identifierU))))
   (recdef
     (recordDef)
-    (language)
+    (language
+      (identifier))
     name: (identifierU)
     constructor: (string)))
 
+===============================
+forward type declaration
+===============================
+
+type Foo a
+
+---
+
+(source_file
+  (typedef
+    (paramT
+      concrete: (identifierU)
+      generic: (identifier))))
+
+===============================
+record WHERE form
+===============================
+
+record Foo where
+    name :: Str
+    age :: Int
+
+---
+
+(source_file
+  (recdef
+    (recordDef)
+    name: (identifierU)
+    (recordTypeEntry
+      key: (identifier)
+      concrete: (identifierU))
+    (recordTypeEntry
+      key: (identifier)
+      concrete: (identifierU))))
+
+===============================
+string constructor
+===============================
+
+record Cpp => Foo = "foo_t" {name :: Str}
+
+---
+
+(source_file
+  (recdef
+    (recordDef)
+    (language
+      (identifierU))
+    name: (identifierU)
+    constructor: (string)
+    entry: (recordTypeEntry
+      key: (identifier)
+      concrete: (identifierU))))

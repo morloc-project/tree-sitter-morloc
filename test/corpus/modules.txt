@@ -1,6 +1,6 @@
 ==============================
 no exported values
-===============================
+==============================
 
 module foo ()
 
@@ -9,8 +9,8 @@ module foo ()
 (source_file
   (module
     modulePath: (modulePath
-      segment: (identifier))))
-
+      segment: (moduleComponent
+        (identifier)))))
 
 ===============================
 universal export
@@ -23,9 +23,9 @@ module foo (*)
 (source_file
   (module
     modulePath: (modulePath
-      segment: (identifier))
+      segment: (moduleComponent
+        (identifier)))
     (star)))
-
 
 ===============================
 multiple export
@@ -41,11 +41,12 @@ module foo
 (source_file
   (module
     modulePath: (modulePath
-      segment: (identifier))
-    (identifier)
-    (identifierU)))
-
-
+      segment: (moduleComponent
+        (identifier)))
+    (exportItem
+      (identifier))
+    (exportItem
+      (identifierU))))
 
 ===============================
 multi-segment module paths
@@ -60,17 +61,68 @@ module lib.foo.bar (a)
 (source_file
   (module
     modulePath: (modulePath
-      segment: (identifier))
-    (identifier))
+      segment: (moduleComponent
+        (identifier)))
+    (exportItem
+      (identifier)))
   (module
     modulePath: (modulePath
-      segment: (identifier)
-      segment: (identifier))
-    (identifier))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier)))
+    (exportItem
+      (identifier)))
   (module
     modulePath: (modulePath
-      segment: (identifier)
-      segment: (identifier)
-      segment: (identifier))
-    (identifier)))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier))
+      segment: (moduleComponent
+        (identifier)))
+    (exportItem
+      (identifier))))
 
+===============================
+hyphenated module name
+===============================
+
+module foo-bar.baz-qux (a)
+
+---
+
+(source_file
+  (module
+    modulePath: (modulePath
+      segment: (moduleComponent
+        (identifier)
+        (identifier))
+      segment: (moduleComponent
+        (identifier)
+        (identifier)))
+    (exportItem
+      (identifier))))
+
+===============================
+operator export
+===============================
+
+module foo (a, (+), (-), (.))
+
+---
+
+(source_file
+  (module
+    modulePath: (modulePath
+      segment: (moduleComponent
+        (identifier)))
+    (exportItem
+      (identifier))
+    (exportItem
+      (operatorExport
+        (operator)))
+    (exportItem
+      (operatorExport))
+    (exportItem
+      (operatorExport))))

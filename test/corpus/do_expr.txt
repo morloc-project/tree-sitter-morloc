@@ -1,0 +1,94 @@
+==============================
+simple do block
+==============================
+
+x = !do
+    {42}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (doExpr
+        (doStmt
+          (suspendExpr
+            (integer)))))))
+
+==============================
+do with bind
+==============================
+
+x = !do
+    y <- foo 5
+    {y}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (doExpr
+        (doStmt
+          (doBind
+            (identifier)
+            (application
+              (identifier)
+              (integer))))
+        (doStmt
+          (suspendExpr
+            (identifier)))))))
+
+==============================
+do with bare statement
+==============================
+
+x = !do
+    foo 3
+    {42}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (doExpr
+        (doStmt
+          (application
+            (identifier)
+            (integer)))
+        (doStmt
+          (suspendExpr
+            (integer)))))))
+
+==============================
+do with let binding
+==============================
+
+x = !do
+    let y = add 3 4
+    {add y 1}
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (forceExpr
+      (doExpr
+        (doStmt
+          (doLet
+            (identifier)
+            (application
+              (identifier)
+              (integer)
+              (integer))))
+        (doStmt
+          (suspendExpr
+            (application
+              (identifier)
+              (identifier)
+              (integer))))))))

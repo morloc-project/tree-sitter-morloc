@@ -16,11 +16,52 @@ class Packable a b where
     where: (interface
       (signature
         name: (identifier)
-        value: (functionT
-          generic: (identifier)
-          generic: (identifier)))
+        value: (sigType
+          (functionT
+            generic: (identifier)
+            generic: (identifier))))
       (signature
         name: (identifier)
-        value: (functionT
-          generic: (identifier)
-          generic: (identifier))))))
+        value: (sigType
+          (functionT
+            generic: (identifier)
+            generic: (identifier)))))))
+
+===============================
+constrained class
+===============================
+
+class Eq a => Ord a where
+  compare :: a -> a -> Int
+
+---
+
+(source_file
+  (typeclass
+    (constraints
+      (constraint
+        (identifierU)
+        generic: (identifier)))
+    class: (identifierU)
+    generic: (identifier)
+    where: (interface
+      (signature
+        name: (identifier)
+        value: (sigType
+          (functionT
+            generic: (identifier)
+            generic: (identifier)
+            concrete: (identifierU)))))))
+
+===============================
+class without where
+===============================
+
+class Foo a
+
+---
+
+(source_file
+  (typeclass
+    class: (identifierU)
+    generic: (identifier)))
