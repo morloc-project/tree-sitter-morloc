@@ -1,0 +1,101 @@
+==============================
+field getter
+==============================
+
+x = .name foo
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (application
+      (getterExpr
+        (gdot)
+        (accessorBody
+          (identifier)))
+      (identifier))))
+
+==============================
+index getter
+==============================
+
+x = .1 t
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (application
+      (getterExpr
+        (gdot)
+        (accessorBody
+          (integer)))
+      (identifier))))
+
+==============================
+chained getter
+==============================
+
+x = .1.2 t
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (application
+      (getterExpr
+        (gdot)
+        (accessorBody
+          (integer)
+          (accessorTail
+            (gdot)
+            (accessorBody
+              (integer)))))
+      (identifier))))
+
+==============================
+grouped getter
+==============================
+
+x = .(.0, .1) t
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (application
+      (getterExpr
+        (gdot)
+        (accessorBody
+          (groupedAccessor
+            (gdot)
+            (accessorBody
+              (integer)))
+          (groupedAccessor
+            (gdot)
+            (accessorBody
+              (integer)))))
+      (identifier))))
+
+==============================
+getter as argument to map
+==============================
+
+x = map .1 xs
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    rhs: (application
+      (identifier)
+      (getterExpr
+        (gdot)
+        (accessorBody
+          (integer)))
+      (identifier))))

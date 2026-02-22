@@ -1,0 +1,78 @@
+==============================
+existential type
+==============================
+
+f :: <a> -> Int
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    value: (sigType
+      (functionT
+        (existentialType
+          (identifier))
+        concrete: (identifierU)))))
+
+==============================
+thunk type
+==============================
+
+f :: {Int} -> Int
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    value: (sigType
+      (functionT
+        (thunkType
+          concrete: (identifierU))
+        concrete: (identifierU)))))
+
+==============================
+constraint in signature
+==============================
+
+f a :: Num a => a -> a
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    arg: (identifier)
+    value: (sigType
+      (constraints
+        (constraint
+          (identifierU)
+          generic: (identifier)))
+      (functionT
+        generic: (identifier)
+        generic: (identifier)))))
+
+==============================
+multiple constraints
+==============================
+
+f a :: (Num a, Show a) => a -> Str
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    arg: (identifier)
+    value: (sigType
+      (constraints
+        (constraint
+          (identifierU)
+          generic: (identifier))
+        (constraint
+          (identifierU)
+          generic: (identifier)))
+      (functionT
+        generic: (identifier)
+        concrete: (identifierU)))))

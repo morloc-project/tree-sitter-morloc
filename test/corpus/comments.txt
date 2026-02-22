@@ -15,7 +15,7 @@ x = 1 -- a
   (lineComment)
   (declaration
     lhs: (identifier)
-    rhs: (number))
+    rhs: (integer))
   (lineComment)
   (lineComment)
   (lineComment))
@@ -38,7 +38,36 @@ x = {- sdf df -} 1 -- hi
   (declaration
     lhs: (identifier)
     (blockComment)
-    rhs: (number))
+    rhs: (integer))
   (lineComment)
   (blockComment))
 
+==============================
+doc comment
+===============================
+
+--' This is a doc comment
+x = 1
+
+---
+
+(source_file
+  (docComment)
+  (declaration
+    lhs: (identifier)
+    rhs: (integer)))
+
+==============================
+group comment
+===============================
+
+--* name: Core Functions
+x = 1
+
+---
+
+(source_file
+  (groupComment)
+  (declaration
+    lhs: (identifier)
+    rhs: (integer)))

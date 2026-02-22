@@ -1,6 +1,6 @@
 ==============================
-x' = 1
-===============================
+simple assignment
+==============================
 
 x' = 1
 
@@ -9,12 +9,11 @@ x' = 1
 (source_file
   (declaration
     lhs: (identifier)
-    rhs: (number)))
-
+    rhs: (integer)))
 
 ==============================
-foo x y = bar (x, 42, "string", True, False) [y]
-===============================
+function with args and application
+==============================
 
 foo x y = bar (x, 42, "string", True, False) [y]
 
@@ -29,17 +28,19 @@ foo x y = bar (x, 42, "string", True, False) [y]
       (identifier)
       (tupleExpr
         (identifier)
-        (number)
-        (string)
+        (integer)
+        (interpString
+          (string_start)
+          (string_content)
+          (string_end))
         (true)
         (false))
       (listExpr
         (identifier)))))
 
-
 ==============================
-record definition
-===============================
+record expression
+==============================
 
 x = { name = "Alice", age = 42 }
 
@@ -51,77 +52,16 @@ x = { name = "Alice", age = 42 }
     rhs: (recordExpr
       (recordExprEntry
         (identifier)
-        (string))
+        (interpString
+          (string_start)
+          (string_content)
+          (string_end)))
       (recordExprEntry
         (identifier)
-        (number)))))
-
-==============================
-x r = x r@k1 . y r@k2
-==============================
-
-x r = x r@k1 . y r@k2
-
----
-
-(source_file
-  (declaration
-    (identifier)
-    (identifier)
-    (composition
-      (application
-        (identifier)
-        (recordAccess
-          (identifier)
-          (identifier)))
-      (application
-        (identifier)
-        (recordAccess
-          (identifier)
-          (identifier))))))
-
-==============================
-foo x = (f x)@key
-==============================
-
-foo x = (f x)@key
-
----
-
-(source_file
-  (declaration
-    (identifier)
-    (identifier)
-    (recordAccess
-      (application
-        (identifier)
-        (identifier))
-      (identifier))))
-
-==============================
-foo = {k = 1, r = 2}@k
-==============================
-
-foo = {k = 1, r = 2}@k
-
----
-
-(source_file
-  (declaration
-    (identifier)
-    (recordAccess
-      (recordExpr
-        (recordExprEntry
-          (identifier)
-          (number))
-        (recordExprEntry
-          (identifier)
-          (number)))
-      (identifier))))
-
+        (integer)))))
 
 ===============================
-foo = bar . baz
+composition with dot
 ===============================
 
 foo = bar . baz
@@ -131,13 +71,13 @@ foo = bar . baz
 (source_file
   (declaration
     lhs: (identifier)
-    rhs: (composition
+    rhs: (infixExpr
       (identifier)
+      (operator)
       (identifier))))
 
-
 ===============================
-foo = map (f . f)
+composition in parens
 ===============================
 
 foo = map (f . f)
@@ -149,14 +89,14 @@ foo = map (f . f)
     (identifier)
     (application
       (identifier)
-      (composition
+      (infixExpr
         (identifier)
+        (operator)
         (identifier)))))
 
-
 ==============================
-foo x y = (bar x . baz y) 42
-===============================
+composition applied to arg
+==============================
 
 foo x y = (bar x . baz y) 42
 
@@ -168,18 +108,19 @@ foo x y = (bar x . baz y) 42
     arg: (identifier)
     arg: (identifier)
     rhs: (application
-      (composition
+      (infixExpr
         (application
           (identifier)
           (identifier))
+        (operator)
         (application
           (identifier)
           (identifier)))
-      (number))))
+      (integer))))
 
 ==============================
-foo = map (\x -> bar x)
-===============================
+lambda expression
+==============================
 
 foo = map (\x -> bar x)
 
@@ -196,10 +137,9 @@ foo = map (\x -> bar x)
           (identifier)
           (identifier))))))
 
-
 ==============================
 multiple statements
-===============================
+==============================
 
 x = 1
 x = 2
@@ -209,15 +149,14 @@ x = 2
 (source_file
   (declaration
     lhs: (identifier)
-    rhs: (number))
+    rhs: (integer))
   (declaration
     lhs: (identifier)
-    rhs: (number)))
-
+    rhs: (integer)))
 
 ==============================
 nested wheres
-===============================
+==============================
 
 x = 1
 x = y where
@@ -231,7 +170,7 @@ x = y where
 (source_file
   (declaration
     lhs: (identifier)
-    rhs: (number))
+    rhs: (integer))
   (declaration
     lhs: (identifier)
     rhs: (identifier)
@@ -246,15 +185,14 @@ x = y where
             where: (block
               (declaration
                 lhs: (identifier)
-                rhs: (number))))))
+                rhs: (integer))))))
       (declaration
         lhs: (identifier)
-        rhs: (number)))))
-
+        rhs: (integer)))))
 
 ==============================
 where spacing
-===============================
+==============================
 
 x = 1
 x = y where
@@ -266,7 +204,7 @@ x = y where
 (source_file
   (declaration
     (identifier)
-    (number))
+    (integer))
   (declaration
     (identifier)
     (identifier)
@@ -280,20 +218,20 @@ x = y where
 
 ==============================
 where spacing (non-zero blank)
-===============================
+==============================
 
-x = 1    
-x = y    where      
-       
-    y = z 
-  
+x = 1
+x = y    where
+
+    y = z
+
     z =    w
 ---
 
 (source_file
   (declaration
     (identifier)
-    (number))
+    (integer))
   (declaration
     (identifier)
     (identifier)
@@ -313,9 +251,9 @@ x = 1
 x = y where
 
     y = z where
-  
+
         z = w where
-                          
+
             w = 1
     g = 4
 
@@ -324,7 +262,7 @@ x = y where
 (source_file
   (declaration
     lhs: (identifier)
-    rhs: (number))
+    rhs: (integer))
   (declaration
     lhs: (identifier)
     rhs: (identifier)
@@ -339,11 +277,10 @@ x = y where
             where: (block
               (declaration
                 lhs: (identifier)
-                rhs: (number))))))
+                rhs: (integer))))))
       (declaration
         lhs: (identifier)
-        rhs: (number)))))
-
+        rhs: (integer)))))
 
 ==============================
 Signatures in where statements
@@ -360,17 +297,61 @@ f = bar 2.0 where
     (identifier)
     (application
       (identifier)
-      (number))
+      (float))
     (block
       (signature
         (identifier)
-        (functionT
-          (identifierU)
-          (identifierU)))
+        (sigType
+          (functionT
+            (identifierU)
+            (identifierU))))
       (declaration
         (identifier)
         (identifier)
         (application
           (identifier)
           (identifier)
-          (number))))))
+          (float))))))
+
+==============================
+inline where clause
+==============================
+
+f x = neg (g x) where g = .1
+
+---
+
+(source_file
+  (declaration
+    lhs: (identifier)
+    arg: (identifier)
+    rhs: (application
+      (identifier)
+      (application
+        (identifier)
+        (identifier)))
+    where: (block
+      (declaration
+        lhs: (identifier)
+        rhs: (getterExpr
+          (gdot)
+          (accessorBody
+            (integer)))))))
+
+==============================
+operator declaration
+==============================
+
+(+) x y = add x y
+
+---
+
+(source_file
+  (declaration
+    lhs: (operator)
+    arg: (identifier)
+    arg: (identifier)
+    rhs: (application
+      (identifier)
+      (identifier)
+      (identifier))))

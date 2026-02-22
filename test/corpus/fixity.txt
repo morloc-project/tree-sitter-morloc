@@ -1,0 +1,42 @@
+==============================
+infixl declaration
+==============================
+
+infixl 6 (+), (-)
+
+---
+
+(source_file
+  (fixity
+    precedence: (integer)
+    (operatorRef
+      (operator))
+    (operatorRef)))
+
+==============================
+infixr declaration
+==============================
+
+infixr 5 (<>)
+
+---
+
+(source_file
+  (fixity
+    precedence: (integer)
+    (operatorRef
+      (operator))))
+
+==============================
+infix declaration
+==============================
+
+infix 4 (==)
+
+---
+
+(source_file
+  (fixity
+    precedence: (integer)
+    (operatorRef
+      (operator))))

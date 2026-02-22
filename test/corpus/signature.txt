@@ -10,33 +10,33 @@ id a :: a -> a
   (signature
     name: (identifier)
     arg: (identifier)
-    value: (functionT
-      generic: (identifier)
-      generic: (identifier))))
-
-
-===============================
-map a b :: (a -> b) -> [a] -> [b]
-===============================
-
-map a b :: (a -> b) -> [a] -> [b]
-
----
-
-(source_file
-  (signature
-    name: (identifier)
-    arg: (identifier)
-    arg: (identifier)
-    value: (functionT
+    value: (sigType
       (functionT
         generic: (identifier)
-        generic: (identifier))
-      (listType
-        generic: (identifier))
-      (listType
         generic: (identifier)))))
 
+===============================
+map a b :: (a -> b) -> [a] -> [b]
+===============================
+
+map a b :: (a -> b) -> [a] -> [b]
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    arg: (identifier)
+    arg: (identifier)
+    value: (sigType
+      (functionT
+        (functionT
+          generic: (identifier)
+          generic: (identifier))
+        (listType
+          generic: (identifier))
+        (listType
+          generic: (identifier))))))
 
 ===============================
 foo :: A -> A B -> C
@@ -49,10 +49,47 @@ foo :: A -> A B -> C
 (source_file
   (signature
     name: (identifier)
-    value: (functionT
-      concrete: (identifierU)
-      (paramT
+    value: (sigType
+      (functionT
         concrete: (identifierU)
-        concrete: (identifierU))
-      concrete: (identifierU))))
+        (paramT
+          concrete: (identifierU)
+          concrete: (identifierU))
+        concrete: (identifierU)))))
 
+===============================
+operator signature
+===============================
+
+(+) :: Int -> Int -> Int
+
+---
+
+(source_file
+  (signature
+    name: (operator)
+    value: (sigType
+      (functionT
+        concrete: (identifierU)
+        concrete: (identifierU)
+        concrete: (identifierU)))))
+
+===============================
+constrained signature
+===============================
+
+show :: Show a => a -> Str
+
+---
+
+(source_file
+  (signature
+    name: (identifier)
+    value: (sigType
+      (constraints
+        (constraint
+          (identifierU)
+          generic: (identifier)))
+      (functionT
+        generic: (identifier)
+        concrete: (identifierU)))))

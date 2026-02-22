@@ -25,7 +25,8 @@ instance Packable [(a, b)] (Map a b) where
       generic: (identifier))
     where: (implementation
       (source
-        (language)
+        (language
+          (identifierU))
         sourceFile: (string)
         (sourceTerm
           name: (string)
@@ -36,6 +37,47 @@ instance Packable [(a, b)] (Map a b) where
       (declaration
         lhs: (identifier)
         rhs: (identifier))
+      (declaration
+        lhs: (identifier)
+        rhs: (identifier)))))
+
+===============================
+instance without where
+===============================
+
+instance Show Int
+
+---
+
+(source_file
+  (instance
+    class: (identifierU)
+    concrete: (identifierU)))
+
+===============================
+constrained instance
+===============================
+
+instance (Show a, Show b) => Show (Pair a b) where
+    show = showPair
+
+---
+
+(source_file
+  (instance
+    (constraints
+      (constraint
+        (identifierU)
+        generic: (identifier))
+      (constraint
+        (identifierU)
+        generic: (identifier)))
+    class: (identifierU)
+    param: (paramT
+      concrete: (identifierU)
+      generic: (identifier)
+      generic: (identifier))
+    where: (implementation
       (declaration
         lhs: (identifier)
         rhs: (identifier)))))

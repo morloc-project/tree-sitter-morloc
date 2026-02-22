@@ -1,37 +1,18 @@
 [
   {
-    "type": "application",
+    "type": "accessorBody",
     "named": true,
-    "fields": {
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "application",
+          "type": "accessorTail",
           "named": true
         },
         {
-          "type": "composition",
-          "named": true
-        },
-        {
-          "type": "false",
+          "type": "groupedAccessor",
           "named": true
         },
         {
@@ -39,7 +20,78 @@
           "named": true
         },
         {
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "accessorTail",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "accessorBody",
+          "named": true
+        },
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "gdot",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
           "named": true
         },
         {
@@ -47,11 +99,11 @@
           "named": true
         },
         {
-          "type": "number",
+          "type": "negativeExpr",
           "named": true
         },
         {
-          "type": "recordAccess",
+          "type": "operatorSection",
           "named": true
         },
         {
@@ -63,11 +115,126 @@
           "named": true
         },
         {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "application",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -95,22 +262,29 @@
   {
     "type": "blockComment",
     "named": true,
+    "extra": true,
     "fields": {}
   },
   {
-    "type": "composition",
+    "type": "constraint",
     "named": true,
     "fields": {
-      "taggedTerm": {
+      "concrete": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifierU",
+            "named": true
+          }
+        ]
+      },
+      "generic": {
         "multiple": true,
         "required": false,
         "types": [
           {
             "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
             "named": true
           }
         ]
@@ -118,18 +292,57 @@
     },
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "application",
+          "type": "existentialType",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "functionT",
           "named": true
         },
         {
-          "type": "lambdaExpr",
+          "type": "identifierU",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
+          "named": true
+        },
+        {
+          "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "constraints",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraint",
           "named": true
         }
       ]
@@ -150,11 +363,31 @@
         ]
       },
       "lhs": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
+          },
+          {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "operator",
             "named": true
           }
         ]
@@ -176,7 +409,7 @@
             "named": true
           },
           {
-            "type": "composition",
+            "type": "doExpr",
             "named": true
           },
           {
@@ -184,7 +417,35 @@
             "named": true
           },
           {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "forceExpr",
+            "named": true
+          },
+          {
+            "type": "getterExpr",
+            "named": true
+          },
+          {
+            "type": "holeExpr",
+            "named": true
+          },
+          {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infixExpr",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "interpString",
             "named": true
           },
           {
@@ -192,15 +453,19 @@
             "named": true
           },
           {
+            "type": "letExpr",
+            "named": true
+          },
+          {
             "type": "listExpr",
             "named": true
           },
           {
-            "type": "number",
+            "type": "negativeExpr",
             "named": true
           },
           {
-            "type": "recordAccess",
+            "type": "operatorSection",
             "named": true
           },
           {
@@ -212,7 +477,7 @@
             "named": true
           },
           {
-            "type": "tag",
+            "type": "suspendExpr",
             "named": true
           },
           {
@@ -222,19 +487,13 @@
           {
             "type": "tupleExpr",
             "named": true
-          }
-        ]
-      },
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
+          },
           {
-            "type": "identifier",
+            "type": "typeAnnotation",
             "named": true
           },
           {
-            "type": "tag",
+            "type": "unitExpr",
             "named": true
           }
         ]
@@ -249,6 +508,528 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "doBind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "doStmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doLet",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "doStmt",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doBind",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "doLet",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "existentialType",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "exportItem",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "identifierU",
+          "named": true
+        },
+        {
+          "type": "operatorExport",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fixity",
+    "named": true,
+    "fields": {
+      "assoc": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "infix",
+            "named": false
+          },
+          {
+            "type": "infixl",
+            "named": false
+          },
+          {
+            "type": "infixr",
+            "named": false
+          }
+        ]
+      },
+      "precedence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "operatorRef",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "float",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "forceExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -281,6 +1062,10 @@
       "required": false,
       "types": [
         {
+          "type": "existentialType",
+          "named": true
+        },
+        {
           "type": "functionT",
           "named": true
         },
@@ -293,7 +1078,15 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
           "named": true
         },
         {
@@ -302,6 +1095,49 @@
         }
       ]
     }
+  },
+  {
+    "type": "getterExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "accessorBody",
+          "named": true
+        },
+        {
+          "type": "gdot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "groupedAccessor",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "accessorBody",
+          "named": true
+        },
+        {
+          "type": "gdot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "holeExpr",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "implementation",
@@ -386,6 +1222,123 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operatorImport",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "infixExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -435,6 +1388,10 @@
             "named": false
           },
           {
+            "type": "existentialType",
+            "named": true
+          },
+          {
             "type": "functionT",
             "named": true
           },
@@ -455,7 +1412,15 @@
             "named": true
           },
           {
+            "type": "string",
+            "named": true
+          },
+          {
             "type": "taggedType",
+            "named": true
+          },
+          {
+            "type": "thunkType",
             "named": true
           },
           {
@@ -466,7 +1431,7 @@
       },
       "where": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "implementation",
@@ -474,7 +1439,22 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "constraints",
+          "named": true
+        }
+      ]
     }
+  },
+  {
+    "type": "integer",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "interface",
@@ -492,24 +1472,9 @@
     }
   },
   {
-    "type": "lambdaExpr",
+    "type": "interpString",
     "named": true,
-    "fields": {
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
@@ -519,7 +1484,7 @@
           "named": true
         },
         {
-          "type": "composition",
+          "type": "doExpr",
           "named": true
         },
         {
@@ -527,7 +1492,43 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "interp_close",
+          "named": true
+        },
+        {
+          "type": "interp_open",
           "named": true
         },
         {
@@ -535,15 +1536,19 @@
           "named": true
         },
         {
+          "type": "letExpr",
+          "named": true
+        },
+        {
           "type": "listExpr",
           "named": true
         },
         {
-          "type": "number",
+          "type": "negativeExpr",
           "named": true
         },
         {
-          "type": "recordAccess",
+          "type": "operatorSection",
           "named": true
         },
         {
@@ -555,11 +1560,138 @@
           "named": true
         },
         {
+          "type": "string_content",
+          "named": true
+        },
+        {
+          "type": "string_end",
+          "named": true
+        },
+        {
+          "type": "string_start",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "lambdaExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -568,27 +1700,236 @@
   {
     "type": "language",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "identifierU",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "letBinding",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "letExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letBinding",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "listExpr",
     "named": true,
-    "fields": {
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
@@ -598,7 +1939,7 @@
           "named": true
         },
         {
-          "type": "composition",
+          "type": "doExpr",
           "named": true
         },
         {
@@ -606,7 +1947,35 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
           "named": true
         },
         {
@@ -614,15 +1983,19 @@
           "named": true
         },
         {
+          "type": "letExpr",
+          "named": true
+        },
+        {
           "type": "listExpr",
           "named": true
         },
         {
-          "type": "number",
+          "type": "negativeExpr",
           "named": true
         },
         {
-          "type": "recordAccess",
+          "type": "operatorSection",
           "named": true
         },
         {
@@ -634,11 +2007,23 @@
           "named": true
         },
         {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -674,6 +2059,10 @@
       "required": false,
       "types": [
         {
+          "type": "existentialType",
+          "named": true
+        },
+        {
           "type": "functionT",
           "named": true
         },
@@ -686,7 +2075,15 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
           "named": true
         },
         {
@@ -716,15 +2113,26 @@
       "required": false,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "identifierU",
+          "type": "exportItem",
           "named": true
         },
         {
           "type": "star",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "moduleComponent",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -739,11 +2147,125 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "moduleComponent",
             "named": true
           }
         ]
       }
+    }
+  },
+  {
+    "type": "negativeExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operatorExport",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operatorImport",
+    "named": true,
+    "fields": {
+      "alias": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "operator",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operatorRef",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operatorSection",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -776,6 +2298,10 @@
       "required": false,
       "types": [
         {
+          "type": "existentialType",
+          "named": true
+        },
+        {
           "type": "functionT",
           "named": true
         },
@@ -788,7 +2314,15 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
           "named": true
         },
         {
@@ -804,8 +2338,12 @@
     "fields": {
       "constructor": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
           {
             "type": "identifierU",
             "named": true
@@ -868,45 +2406,11 @@
           "named": true
         },
         {
+          "type": "recordTypeEntry",
+          "named": true
+        },
+        {
           "type": "tableDef",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "recordAccess",
-    "named": true,
-    "fields": {
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "application",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "recordExpr",
           "named": true
         }
       ]
@@ -930,22 +2434,7 @@
   {
     "type": "recordExprEntry",
     "named": true,
-    "fields": {
-      "taggedTerm": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
@@ -955,7 +2444,7 @@
           "named": true
         },
         {
-          "type": "composition",
+          "type": "doExpr",
           "named": true
         },
         {
@@ -963,7 +2452,35 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
           "named": true
         },
         {
@@ -971,15 +2488,19 @@
           "named": true
         },
         {
+          "type": "letExpr",
+          "named": true
+        },
+        {
           "type": "listExpr",
           "named": true
         },
         {
-          "type": "number",
+          "type": "negativeExpr",
           "named": true
         },
         {
-          "type": "recordAccess",
+          "type": "operatorSection",
           "named": true
         },
         {
@@ -991,11 +2512,23 @@
           "named": true
         },
         {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -1048,6 +2581,10 @@
             "named": false
           },
           {
+            "type": "existentialType",
+            "named": true
+          },
+          {
             "type": "functionT",
             "named": true
           },
@@ -1068,7 +2605,15 @@
             "named": true
           },
           {
+            "type": "string",
+            "named": true
+          },
+          {
             "type": "taggedType",
+            "named": true
+          },
+          {
+            "type": "thunkType",
             "named": true
           },
           {
@@ -1080,19 +2625,9 @@
     }
   },
   {
-    "type": "signature",
+    "type": "sigType",
     "named": true,
     "fields": {
-      "arg": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
       "concrete": {
         "multiple": false,
         "required": false,
@@ -1112,10 +2647,58 @@
             "named": true
           }
         ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "constraints",
+          "named": true
+        },
+        {
+          "type": "existentialType",
+          "named": true
+        },
+        {
+          "type": "functionT",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
+          "named": true
+        },
+        {
+          "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "signature",
+    "named": true,
+    "fields": {
+      "arg": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -1123,7 +2706,7 @@
           }
         ]
       },
-      "value": {
+      "name": {
         "multiple": true,
         "required": true,
         "types": [
@@ -1136,31 +2719,29 @@
             "named": false
           },
           {
-            "type": "functionT",
-            "named": true
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
           },
           {
             "type": "identifier",
             "named": true
           },
           {
-            "type": "identifierU",
+            "type": "operator",
             "named": true
-          },
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
-            "type": "listType",
-            "named": true
-          },
-          {
-            "type": "paramT",
-            "named": true
-          },
-          {
-            "type": "taggedType",
-            "named": true
-          },
-          {
-            "type": "tupleType",
+            "type": "sigType",
             "named": true
           }
         ]
@@ -1171,6 +2752,16 @@
     "type": "source",
     "named": true,
     "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "sourceFile": {
         "multiple": true,
         "required": false,
@@ -1206,15 +2797,35 @@
     "named": true,
     "fields": {
       "alias": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
+          },
           {
             "type": "identifier",
             "named": true
           },
           {
             "type": "identifierU",
+            "named": true
+          },
+          {
+            "type": "operator",
             "named": true
           }
         ]
@@ -1242,6 +2853,10 @@
       "types": [
         {
           "type": "declaration",
+          "named": true
+        },
+        {
+          "type": "fixity",
           "named": true
         },
         {
@@ -1274,6 +2889,109 @@
         },
         {
           "type": "typedef",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "suspendExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -1316,34 +3034,83 @@
     }
   },
   {
-    "type": "tupleExpr",
+    "type": "thunkType",
     "named": true,
     "fields": {
-      "taggedTerm": {
-        "multiple": true,
+      "concrete": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifierU",
+            "named": true
+          }
+        ]
+      },
+      "generic": {
+        "multiple": false,
         "required": false,
         "types": [
           {
             "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tag",
             "named": true
           }
         ]
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
+      "types": [
+        {
+          "type": "existentialType",
+          "named": true
+        },
+        {
+          "type": "functionT",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
+          "named": true
+        },
+        {
+          "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "tupleExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "application",
           "named": true
         },
         {
-          "type": "composition",
+          "type": "doExpr",
           "named": true
         },
         {
@@ -1351,7 +3118,35 @@
           "named": true
         },
         {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
           "named": true
         },
         {
@@ -1359,15 +3154,19 @@
           "named": true
         },
         {
+          "type": "letExpr",
+          "named": true
+        },
+        {
           "type": "listExpr",
           "named": true
         },
         {
-          "type": "number",
+          "type": "negativeExpr",
           "named": true
         },
         {
-          "type": "recordAccess",
+          "type": "operatorSection",
           "named": true
         },
         {
@@ -1379,11 +3178,23 @@
           "named": true
         },
         {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
           "type": "true",
           "named": true
         },
         {
           "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -1419,6 +3230,10 @@
       "required": false,
       "types": [
         {
+          "type": "existentialType",
+          "named": true
+        },
+        {
           "type": "functionT",
           "named": true
         },
@@ -1431,11 +3246,171 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "taggedType",
           "named": true
         },
         {
+          "type": "thunkType",
+          "named": true
+        },
+        {
           "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "typeAnnotation",
+    "named": true,
+    "fields": {
+      "concrete": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifierU",
+            "named": true
+          }
+        ]
+      },
+      "generic": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "existentialType",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "functionT",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "suspendExpr",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "tupleType",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -1488,6 +3463,10 @@
             "named": false
           },
           {
+            "type": "existentialType",
+            "named": true
+          },
+          {
             "type": "functionT",
             "named": true
           },
@@ -1508,7 +3487,15 @@
             "named": true
           },
           {
+            "type": "string",
+            "named": true
+          },
+          {
             "type": "taggedType",
+            "named": true
+          },
+          {
+            "type": "thunkType",
             "named": true
           },
           {
@@ -1519,7 +3506,7 @@
       },
       "where": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "interface",
@@ -1527,6 +3514,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "constraints",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1566,6 +3563,10 @@
             "named": false
           },
           {
+            "type": "existentialType",
+            "named": true
+          },
+          {
             "type": "functionT",
             "named": true
           },
@@ -1594,6 +3595,10 @@
             "named": true
           },
           {
+            "type": "thunkType",
+            "named": true
+          },
+          {
             "type": "tupleType",
             "named": true
           }
@@ -1604,6 +3609,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "existentialType",
+          "named": true
+        },
         {
           "type": "functionT",
           "named": true
@@ -1621,7 +3630,15 @@
           "named": true
         },
         {
+          "type": "string",
+          "named": true
+        },
+        {
           "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "thunkType",
           "named": true
         },
         {
@@ -1630,6 +3647,15 @@
         }
       ]
     }
+  },
+  {
+    "type": "unitExpr",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "!",
+    "named": false
   },
   {
     "type": "(",
@@ -1641,6 +3667,10 @@
   },
   {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
     "named": false
   },
   {
@@ -1660,6 +3690,14 @@
     "named": false
   },
   {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "<-",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
@@ -1668,7 +3706,7 @@
     "named": false
   },
   {
-    "type": "@",
+    "type": ">",
     "named": false
   },
   {
@@ -1684,6 +3722,10 @@
     "named": false
   },
   {
+    "type": "_",
+    "named": false
+  },
+  {
     "type": "as",
     "named": false
   },
@@ -1692,12 +3734,30 @@
     "named": false
   },
   {
+    "type": "do",
+    "named": false
+  },
+  {
+    "type": "docComment",
+    "named": true,
+    "extra": true
+  },
+  {
     "type": "false",
     "named": true
   },
   {
     "type": "from",
     "named": false
+  },
+  {
+    "type": "gdot",
+    "named": true
+  },
+  {
+    "type": "groupComment",
+    "named": true,
+    "extra": true
   },
   {
     "type": "identifier",
@@ -1712,7 +3772,35 @@
     "named": false
   },
   {
+    "type": "in",
+    "named": false
+  },
+  {
+    "type": "infix",
+    "named": false
+  },
+  {
+    "type": "infixl",
+    "named": false
+  },
+  {
+    "type": "infixr",
+    "named": false
+  },
+  {
     "type": "instance",
+    "named": false
+  },
+  {
+    "type": "interp_close",
+    "named": true
+  },
+  {
+    "type": "interp_open",
+    "named": true
+  },
+  {
+    "type": "let",
     "named": false
   },
   {
@@ -1725,11 +3813,11 @@
     "named": false
   },
   {
-    "type": "number",
+    "type": "objectDef",
     "named": true
   },
   {
-    "type": "objectDef",
+    "type": "operator",
     "named": true
   },
   {
@@ -1746,6 +3834,18 @@
   },
   {
     "type": "string",
+    "named": true
+  },
+  {
+    "type": "string_content",
+    "named": true
+  },
+  {
+    "type": "string_end",
+    "named": true
+  },
+  {
+    "type": "string_start",
     "named": true
   },
   {
