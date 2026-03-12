@@ -282,9 +282,23 @@ bool tree_sitter_morloc_external_scanner_scan(
         if( scanner->dedents == 0 &&
             lexer->get_column(lexer) < scanner->indents[scanner->level]
         ){
+            // Find the nearest indent level <= current column.
+            // First try exact match, then fall back to nearest lower level.
+            bool found = false;
             for(int i = scanner->level; i >= 0; i--){
                 if(lexer->get_column(lexer) == scanner->indents[i]){
                     scanner->dedents = scanner->level - i;
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                // No exact match - dedent to nearest level <= current column
+                for(int i = scanner->level; i >= 0; i--){
+                    if(scanner->indents[i] <= lexer->get_column(lexer)){
+                        scanner->dedents = scanner->level - i;
+                        break;
+                    }
                 }
             }
         }

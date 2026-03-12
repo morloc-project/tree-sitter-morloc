@@ -43,12 +43,15 @@ module.exports = grammar({
   extras: $ => [/\s/, /\n/, /\r/, $.docComment, $.groupComment, $.lineComment, $.blockComment],
 
   conflicts: $ => [
-    [$.signature, $.declaration],
+    [$.signature, $.declaration, $.guardedDeclaration],
     [$.typedef, $._typeAtom],
     [$.constraint, $._typeHead],
     [$.constraint, $.typeclass],
+    [$.constraint, $.instanceHead],
+    [$.constraint, $._typeAtom],
     [$._typeHead, $._typeAtom],
     [$._expression, $._atomExpr],
+    [$._atomExpr, $.qualifiedVar],
   ],
 
   rules: {
@@ -60,12 +63,14 @@ module.exports = grammar({
       $.module,
       $.import,
       $.source,
+      $.inlineSource,
       $.typeclass,
       $.instance,
       $.typedef,
       $.recdef,
       $.fixity,
       $.signature,
+      $.guardedDeclaration,
       $.declaration
     ),
 
@@ -91,7 +96,7 @@ module.exports = grammar({
 
     module: $ => seq(
       "module",
-      field("modulePath", $.modulePath),
+      optional(field("modulePath", $.modulePath)),
       parens(
         choice(
           $.star,
@@ -102,7 +107,7 @@ module.exports = grammar({
 
     star: $ => "*",
 
-    modulePath: $ => sepBy1(field("segment", $.moduleComponent), "."),
+    modulePath: $ => sepBy1(field("segment", $.moduleComponent), choice(".", $.gdot)),
 
     moduleComponent: $ => seq(
       $.identifier,
@@ -125,8 +130,19 @@ module.exports = grammar({
 
     import: $ => seq(
       "import",
-      field("modulePath", $.modulePath),
+      optional(field("relative", $.relativeDot)),
+      field("modulePath", $.importModulePath),
+      optional(seq("as", field("alias", $.identifier))),
       optional(parens(sepBy($.importTerm, ",")))
+    ),
+
+    // Relative import dot prefix
+    relativeDot: $ => $.gdot,
+
+    // Module path in import context: allows optional namespace prefix owner/name
+    importModulePath: $ => seq(
+      optional(seq(field("namespace", $.moduleComponent), "/")),
+      $.modulePath
     ),
 
     importTerm: $ => choice(
@@ -166,28 +182,43 @@ module.exports = grammar({
         field("sourceFile", optional(seq("from", $.string))),
         parens(sepBy($.sourceTerm, ","))
       ),
-      // New WHERE form: source Lang opt_from where { names }
+      // New WHERE form: source Lang opt_from where { items }
       seq(
         "source",
         $.language,
         field("sourceFile", optional(seq("from", $.string))),
         "where",
         $._indent,
-        repeat1(seq($._left_aligned, field("name", $.identifier))),
+        repeat1(seq($._left_aligned, $.sourceNewItem)),
         $._dedent
       )
     ),
 
+    // %inline before a source declaration
+    inlineSource: $ => seq("%inline", $.source),
+
     sourceTerm: $ => seq(
-      field("name", $.string),
+      field("name", choice($.string, $.sourceOp)),
       optional(seq("as", field("alias", choice(
         $.identifier,
         $.identifierU,
-        seq("(", $.operator, ")"),
-        seq("(", "-", ")"),
-        seq("(", ".", ")")
+        $.sourceOp
       ))))
     ),
+
+    // Items in source ... where blocks
+    sourceNewItem: $ => seq(
+      optional(field("inline", $.inlinePragma)),
+      field("name", choice($.identifier, $.sourceOp))
+    ),
+
+    sourceOp: $ => choice(
+      seq("(", $.operator, ")"),
+      seq("(", "-", ")"),
+      seq("(", ".", ")")
+    ),
+
+    inlinePragma: $ => "%inline",
 
     // --------- FIXITY --------------------------------------------------------
 
@@ -233,7 +264,7 @@ module.exports = grammar({
       parens(sepBy1($.constraint, ","))
     ),
 
-    constraint: $ => seq($.identifierU, repeat1($._typeAtom)),
+    constraint: $ => seq($.identifierU, repeat($._typeAtom)),
 
     // --------- TYPEDEF -------------------------------------------------------
 
@@ -329,7 +360,8 @@ module.exports = grammar({
       field("concrete", $.identifierU),
       $.taggedType,
       $.existentialType,
-      $.thunkType,
+      $.effectType,
+      $.optionalType,
       $.listType,
       $.tupleType,
       parens($._type),
@@ -344,9 +376,14 @@ module.exports = grammar({
       $.paramT
     ),
 
+    // Existential type: <a> (lowercase name)
     existentialType: $ => seq("<", $.identifier, ">"),
 
-    thunkType: $ => seq("{", $._type, "}"),
+    // Effect type: <IO> T or <IO, Error> T (uppercase labels followed by a type)
+    effectType: $ => seq("<", sepBy1($.identifierU, ","), ">", $._typeFunArg),
+
+    // Optional type: ?Type
+    optionalType: $ => seq("?", $._typeAtom),
 
     listType: $ => brackets($._type),
     tupleType: $ => parens(sepBy2($._type, ",")),
@@ -382,15 +419,28 @@ module.exports = grammar({
     instance: $ => seq(
       "instance",
       optional(seq($.constraints, "=>")),
-      field("class", $.identifierU),
-      repeat(field("param", $._typeAtom)),
+      $.instanceHeads,
       optional(field("where", $.implementation))
+    ),
+
+    // Multiple instance heads separated by commas
+    instanceHeads: $ => sepBy1($.instanceHead, ","),
+
+    instanceHead: $ => seq(
+      field("class", $.identifierU),
+      repeat(field("param", $._typeAtom))
     ),
 
     implementation: $ => seq(
       "where",
       $._indent,
-      repeat1(seq($._left_aligned, choice($.source, $.declaration))),
+      repeat1(seq($._left_aligned, choice(
+        $.source,
+        $.inlineSource,
+        $.signature,
+        $.guardedDeclaration,
+        $.declaration
+      ))),
       $._dedent
     ),
 
@@ -404,16 +454,28 @@ module.exports = grammar({
       field("where", optional($.block))
     ),
 
+    // Guarded declaration: f x ? cond = val ? cond2 = val2 : default
+    guardedDeclaration: $ => seq(
+      field("lhs", $._evarOrOp),
+      repeat(field("arg", $.identifier)),
+      repeat1($.guardClause),
+      ":",
+      field("default", $._expression),
+      field("where", optional($.block))
+    ),
+
+    guardClause: $ => seq("?", $._expression, "=", $._expression),
+
     block: $ => choice(
       // Layout form (multi-line where block)
       seq(
         "where",
         $._indent,
-        repeat1(seq($._left_aligned, choice($.declaration, $.signature))),
+        repeat1(seq($._left_aligned, choice($.declaration, $.guardedDeclaration, $.signature))),
         $._dedent
       ),
       // Inline form (single binding on same line)
-      seq("where", choice($.declaration, $.signature))
+      seq("where", choice($.declaration, $.guardedDeclaration, $.signature))
     ),
 
     // --------- EXPRESSIONS ---------------------------------------------------
@@ -422,6 +484,7 @@ module.exports = grammar({
       $.letExpr,
       $.doExpr,
       $.lambdaExpr,
+      $.guardExpr,
       $.typeAnnotation,
       $._infixExpr
     ),
@@ -431,6 +494,13 @@ module.exports = grammar({
       "::",
       $._type
     )),
+
+    // Guard expression (inline): ? cond = val ? cond2 = val2 : default
+    guardExpr: $ => seq(
+      repeat1($.guardClause),
+      ":",
+      $._expression
+    ),
 
     _infixExpr: $ => choice(
       $._operand,
@@ -451,40 +521,54 @@ module.exports = grammar({
 
     _operand: $ => choice(
       $.application,
-      $._atomExpr,
+      $._forceOrAtom,
       $.negativeExpr
     ),
 
     negativeExpr: $ => seq("-", choice($.integer, $.float)),
 
     application: $ => prec.left(3, seq(
-      $._atomExpr,
-      repeat1($._atomExpr)
+      $._forceOrAtom,
+      repeat1($._forceOrAtom)
     )),
 
+    // Force can appear in application position
+    _forceOrAtom: $ => choice(
+      $.forceExpr,
+      $._atomExpr
+    ),
+
     _atomExpr: $ => choice(
+      $.qualifiedVar,
       $.identifier,
       $._primitiveExpr,
       $.listExpr,
       $.tupleExpr,
       $.recordExpr,
       $.getterExpr,
-      $.forceExpr,
-      $.suspendExpr,
       $.holeExpr,
       $.unitExpr,
       $.operatorSection,
       $.doExpr,
+      $.nullExpr,
+      $.intrinsicExpr,
       parens($._expression)
     ),
 
     forceExpr: $ => seq("!", $._atomExpr),
 
-    suspendExpr: $ => seq("{", $._expression, "}"),
-
     holeExpr: $ => "_",
 
     unitExpr: $ => seq("(", ")"),
+
+    // Null literal
+    nullExpr: $ => "Null",
+
+    // Intrinsic expression: @name
+    intrinsicExpr: $ => /@[a-z][a-zA-Z0-9_']*/,
+
+    // Qualified variable: namespace.var
+    qualifiedVar: $ => seq($.identifier, $.gdot, $.identifier),
 
     operatorSection: $ => choice(
       seq("(", $.operator, ")"),
@@ -517,20 +601,30 @@ module.exports = grammar({
       $._expression
     ),
 
-    letBinding: $ => seq(
-      "let",
-      choice($.identifier, "_"),
-      "=",
-      $._expression
+    letBinding: $ => choice(
+      seq("let", choice($.identifier, "_"), "=", $._expression),
+      // Let binding with guards
+      seq(
+        "let",
+        $.identifier,
+        repeat1($.guardClause),
+        ":",
+        $._expression
+      )
     ),
 
     // --------- DO EXPRESSION -------------------------------------------------
 
-    doExpr: $ => seq(
-      "do",
-      $._indent,
-      repeat1(seq($._left_aligned, $.doStmt)),
-      $._dedent
+    doExpr: $ => choice(
+      // Layout form (multi-line do block)
+      seq(
+        "do",
+        $._indent,
+        repeat1(seq($._left_aligned, $.doStmt)),
+        $._dedent
+      ),
+      // Inline form (single expression on same line as do)
+      seq("do", $._infixExpr)
     ),
 
     doStmt: $ => choice(
@@ -541,7 +635,17 @@ module.exports = grammar({
 
     doBind: $ => seq($.identifier, "<-", $._expression),
 
-    doLet: $ => seq("let", choice($.identifier, "_"), "=", $._expression),
+    doLet: $ => choice(
+      seq("let", choice($.identifier, "_"), "=", $._expression),
+      // Do-let with guards
+      seq(
+        "let",
+        $.identifier,
+        repeat1($.guardClause),
+        ":",
+        $._expression
+      )
+    ),
 
     // --------- LAMBDA --------------------------------------------------------
 

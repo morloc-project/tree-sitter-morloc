@@ -67,6 +67,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -87,6 +91,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -103,7 +111,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -112,10 +128,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -170,6 +182,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -190,6 +206,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -206,7 +226,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -215,10 +243,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -250,6 +274,10 @@
       "types": [
         {
           "type": "declaration",
+          "named": true
+        },
+        {
+          "type": "guardedDeclaration",
           "named": true
         },
         {
@@ -295,6 +323,10 @@
       "required": true,
       "types": [
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -311,6 +343,10 @@
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
           "named": true
         },
@@ -320,10 +356,6 @@
         },
         {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -429,6 +461,10 @@
             "named": true
           },
           {
+            "type": "guardExpr",
+            "named": true
+          },
+          {
             "type": "holeExpr",
             "named": true
           },
@@ -449,6 +485,10 @@
             "named": true
           },
           {
+            "type": "intrinsicExpr",
+            "named": true
+          },
+          {
             "type": "lambdaExpr",
             "named": true
           },
@@ -465,7 +505,15 @@
             "named": true
           },
           {
+            "type": "nullExpr",
+            "named": true
+          },
+          {
             "type": "operatorSection",
+            "named": true
+          },
+          {
+            "type": "qualifiedVar",
             "named": true
           },
           {
@@ -474,10 +522,6 @@
           },
           {
             "type": "string",
-            "named": true
-          },
-          {
-            "type": "suspendExpr",
             "named": true
           },
           {
@@ -543,6 +587,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -563,6 +611,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -579,7 +631,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -588,10 +648,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -622,7 +678,111 @@
       "required": true,
       "types": [
         {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
           "type": "doStmt",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
           "named": true
         }
       ]
@@ -661,6 +821,14 @@
           "named": true
         },
         {
+          "type": "guardClause",
+          "named": true
+        },
+        {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -681,6 +849,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -697,7 +869,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -706,10 +886,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -772,6 +948,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -792,6 +972,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -808,7 +992,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -817,10 +1009,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -837,6 +1025,78 @@
         },
         {
           "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "effectType",
+    "named": true,
+    "fields": {
+      "concrete": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifierU",
+            "named": true
+          }
+        ]
+      },
+      "generic": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "effectType",
+          "named": true
+        },
+        {
+          "type": "existentialType",
+          "named": true
+        },
+        {
+          "type": "functionT",
+          "named": true
+        },
+        {
+          "type": "identifierU",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "optionalType",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "tupleType",
           "named": true
         }
       ]
@@ -962,6 +1222,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -982,6 +1246,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -998,7 +1266,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -1007,10 +1283,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1062,6 +1334,10 @@
       "required": false,
       "types": [
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -1074,6 +1350,10 @@
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
           "named": true
         },
@@ -1083,10 +1363,6 @@
         },
         {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -1135,6 +1411,424 @@
     }
   },
   {
+    "type": "guardClause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "guardExpr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "application",
+          "named": true
+        },
+        {
+          "type": "doExpr",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "forceExpr",
+          "named": true
+        },
+        {
+          "type": "getterExpr",
+          "named": true
+        },
+        {
+          "type": "guardClause",
+          "named": true
+        },
+        {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
+          "type": "holeExpr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infixExpr",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
+          "type": "lambdaExpr",
+          "named": true
+        },
+        {
+          "type": "letExpr",
+          "named": true
+        },
+        {
+          "type": "listExpr",
+          "named": true
+        },
+        {
+          "type": "negativeExpr",
+          "named": true
+        },
+        {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
+          "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
+          "named": true
+        },
+        {
+          "type": "recordExpr",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "tupleExpr",
+          "named": true
+        },
+        {
+          "type": "typeAnnotation",
+          "named": true
+        },
+        {
+          "type": "unitExpr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "guardedDeclaration",
+    "named": true,
+    "fields": {
+      "arg": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "default": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "application",
+            "named": true
+          },
+          {
+            "type": "doExpr",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "forceExpr",
+            "named": true
+          },
+          {
+            "type": "getterExpr",
+            "named": true
+          },
+          {
+            "type": "guardExpr",
+            "named": true
+          },
+          {
+            "type": "holeExpr",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infixExpr",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "interpString",
+            "named": true
+          },
+          {
+            "type": "intrinsicExpr",
+            "named": true
+          },
+          {
+            "type": "lambdaExpr",
+            "named": true
+          },
+          {
+            "type": "letExpr",
+            "named": true
+          },
+          {
+            "type": "listExpr",
+            "named": true
+          },
+          {
+            "type": "negativeExpr",
+            "named": true
+          },
+          {
+            "type": "nullExpr",
+            "named": true
+          },
+          {
+            "type": "operatorSection",
+            "named": true
+          },
+          {
+            "type": "qualifiedVar",
+            "named": true
+          },
+          {
+            "type": "recordExpr",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "tupleExpr",
+            "named": true
+          },
+          {
+            "type": "typeAnnotation",
+            "named": true
+          },
+          {
+            "type": "unitExpr",
+            "named": true
+          }
+        ]
+      },
+      "lhs": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": ".",
+            "named": false
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "operator",
+            "named": true
+          }
+        ]
+      },
+      "where": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "guardClause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "holeExpr",
     "named": true,
     "fields": {}
@@ -1152,6 +1846,18 @@
           "named": true
         },
         {
+          "type": "guardedDeclaration",
+          "named": true
+        },
+        {
+          "type": "inlineSource",
+          "named": true
+        },
+        {
+          "type": "signature",
+          "named": true
+        },
+        {
           "type": "source",
           "named": true
         }
@@ -1162,12 +1868,32 @@
     "type": "import",
     "named": true,
     "fields": {
+      "alias": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "modulePath": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "modulePath",
+            "type": "importModulePath",
+            "named": true
+          }
+        ]
+      },
+      "relative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "relativeDot",
             "named": true
           }
         ]
@@ -1179,6 +1905,32 @@
       "types": [
         {
           "type": "importTerm",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "importModulePath",
+    "named": true,
+    "fields": {
+      "namespace": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "moduleComponent",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "modulePath",
           "named": true
         }
       ]
@@ -1267,6 +2019,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1287,6 +2043,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -1303,6 +2063,10 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operator",
           "named": true
         },
@@ -1311,15 +2075,15 @@
           "named": true
         },
         {
+          "type": "qualifiedVar",
+          "named": true
+        },
+        {
           "type": "recordExpr",
           "named": true
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1342,7 +2106,57 @@
     }
   },
   {
+    "type": "inlinePragma",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "inlineSource",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "source",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "instance",
+    "named": true,
+    "fields": {
+      "where": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "implementation",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraints",
+          "named": true
+        },
+        {
+          "type": "instanceHeads",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "instanceHead",
     "named": true,
     "fields": {
       "class": {
@@ -1388,6 +2202,10 @@
             "named": false
           },
           {
+            "type": "effectType",
+            "named": true
+          },
+          {
             "type": "existentialType",
             "named": true
           },
@@ -1408,6 +2226,10 @@
             "named": true
           },
           {
+            "type": "optionalType",
+            "named": true
+          },
+          {
             "type": "paramT",
             "named": true
           },
@@ -1420,32 +2242,23 @@
             "named": true
           },
           {
-            "type": "thunkType",
-            "named": true
-          },
-          {
             "type": "tupleType",
             "named": true
           }
         ]
-      },
-      "where": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "implementation",
-            "named": true
-          }
-        ]
       }
-    },
+    }
+  },
+  {
+    "type": "instanceHeads",
+    "named": true,
+    "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
-          "type": "constraints",
+          "type": "instanceHead",
           "named": true
         }
       ]
@@ -1504,6 +2317,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1532,6 +2349,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -1548,7 +2369,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -1569,10 +2398,6 @@
         },
         {
           "type": "string_start",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1627,6 +2452,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1647,6 +2476,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -1663,7 +2496,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -1672,10 +2513,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1749,6 +2586,14 @@
           "named": true
         },
         {
+          "type": "guardClause",
+          "named": true
+        },
+        {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1769,6 +2614,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -1785,7 +2634,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -1794,10 +2651,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1852,6 +2705,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1869,6 +2726,10 @@
         },
         {
           "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "intrinsicExpr",
           "named": true
         },
         {
@@ -1892,7 +2753,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -1901,10 +2770,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -1959,6 +2824,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -1979,6 +2848,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -1995,7 +2868,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -2004,10 +2885,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -2059,6 +2936,10 @@
       "required": false,
       "types": [
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -2068,6 +2949,10 @@
         },
         {
           "type": "listType",
+          "named": true
+        },
+        {
+          "type": "optionalType",
           "named": true
         },
         {
@@ -2083,10 +2968,6 @@
           "named": true
         },
         {
-          "type": "thunkType",
-          "named": true
-        },
-        {
           "type": "tupleType",
           "named": true
         }
@@ -2099,7 +2980,7 @@
     "fields": {
       "modulePath": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "modulePath",
@@ -2152,6 +3033,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "gdot",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2269,6 +3160,74 @@
     }
   },
   {
+    "type": "optionalType",
+    "named": true,
+    "fields": {
+      "concrete": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifierU",
+            "named": true
+          }
+        ]
+      },
+      "generic": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "effectType",
+          "named": true
+        },
+        {
+          "type": "existentialType",
+          "named": true
+        },
+        {
+          "type": "functionT",
+          "named": true
+        },
+        {
+          "type": "listType",
+          "named": true
+        },
+        {
+          "type": "optionalType",
+          "named": true
+        },
+        {
+          "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "taggedType",
+          "named": true
+        },
+        {
+          "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "paramT",
     "named": true,
     "fields": {
@@ -2298,6 +3257,10 @@
       "required": false,
       "types": [
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -2307,6 +3270,10 @@
         },
         {
           "type": "listType",
+          "named": true
+        },
+        {
+          "type": "optionalType",
           "named": true
         },
         {
@@ -2322,11 +3289,26 @@
           "named": true
         },
         {
-          "type": "thunkType",
+          "type": "tupleType",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "qualifiedVar",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "gdot",
           "named": true
         },
         {
-          "type": "tupleType",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -2464,6 +3446,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -2484,6 +3470,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -2500,7 +3490,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -2509,10 +3507,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -2581,6 +3575,10 @@
             "named": false
           },
           {
+            "type": "effectType",
+            "named": true
+          },
+          {
             "type": "existentialType",
             "named": true
           },
@@ -2601,6 +3599,10 @@
             "named": true
           },
           {
+            "type": "optionalType",
+            "named": true
+          },
+          {
             "type": "paramT",
             "named": true
           },
@@ -2613,15 +3615,26 @@
             "named": true
           },
           {
-            "type": "thunkType",
-            "named": true
-          },
-          {
             "type": "tupleType",
             "named": true
           }
         ]
       }
+    }
+  },
+  {
+    "type": "relativeDot",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "gdot",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2658,6 +3671,10 @@
           "named": true
         },
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -2670,6 +3687,10 @@
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
           "named": true
         },
@@ -2679,10 +3700,6 @@
         },
         {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -2752,16 +3769,6 @@
     "type": "source",
     "named": true,
     "fields": {
-      "name": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
       "sourceFile": {
         "multiple": true,
         "required": false,
@@ -2786,7 +3793,56 @@
           "named": true
         },
         {
+          "type": "sourceNewItem",
+          "named": true
+        },
+        {
           "type": "sourceTerm",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sourceNewItem",
+    "named": true,
+    "fields": {
+      "inline": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "inlinePragma",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "sourceOp",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "sourceOp",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "operator",
           "named": true
         }
       ]
@@ -2797,25 +3853,9 @@
     "named": true,
     "fields": {
       "alias": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "-",
-            "named": false
-          },
-          {
-            "type": ".",
-            "named": false
-          },
           {
             "type": "identifier",
             "named": true
@@ -2825,7 +3865,7 @@
             "named": true
           },
           {
-            "type": "operator",
+            "type": "sourceOp",
             "named": true
           }
         ]
@@ -2834,6 +3874,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "sourceOp",
+            "named": true
+          },
           {
             "type": "string",
             "named": true
@@ -2860,7 +3904,15 @@
           "named": true
         },
         {
+          "type": "guardedDeclaration",
+          "named": true
+        },
+        {
           "type": "import",
+          "named": true
+        },
+        {
+          "type": "inlineSource",
           "named": true
         },
         {
@@ -2889,109 +3941,6 @@
         },
         {
           "type": "typedef",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "suspendExpr",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "application",
-          "named": true
-        },
-        {
-          "type": "doExpr",
-          "named": true
-        },
-        {
-          "type": "false",
-          "named": true
-        },
-        {
-          "type": "float",
-          "named": true
-        },
-        {
-          "type": "forceExpr",
-          "named": true
-        },
-        {
-          "type": "getterExpr",
-          "named": true
-        },
-        {
-          "type": "holeExpr",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "infixExpr",
-          "named": true
-        },
-        {
-          "type": "integer",
-          "named": true
-        },
-        {
-          "type": "interpString",
-          "named": true
-        },
-        {
-          "type": "lambdaExpr",
-          "named": true
-        },
-        {
-          "type": "letExpr",
-          "named": true
-        },
-        {
-          "type": "listExpr",
-          "named": true
-        },
-        {
-          "type": "negativeExpr",
-          "named": true
-        },
-        {
-          "type": "operatorSection",
-          "named": true
-        },
-        {
-          "type": "recordExpr",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
-          "named": true
-        },
-        {
-          "type": "true",
-          "named": true
-        },
-        {
-          "type": "tupleExpr",
-          "named": true
-        },
-        {
-          "type": "typeAnnotation",
-          "named": true
-        },
-        {
-          "type": "unitExpr",
           "named": true
         }
       ]
@@ -3034,70 +3983,6 @@
     }
   },
   {
-    "type": "thunkType",
-    "named": true,
-    "fields": {
-      "concrete": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifierU",
-            "named": true
-          }
-        ]
-      },
-      "generic": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "existentialType",
-          "named": true
-        },
-        {
-          "type": "functionT",
-          "named": true
-        },
-        {
-          "type": "listType",
-          "named": true
-        },
-        {
-          "type": "paramT",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
-          "named": true
-        },
-        {
-          "type": "tupleType",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "tupleExpr",
     "named": true,
     "fields": {},
@@ -3130,6 +4015,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -3150,6 +4039,10 @@
           "named": true
         },
         {
+          "type": "intrinsicExpr",
+          "named": true
+        },
+        {
           "type": "lambdaExpr",
           "named": true
         },
@@ -3166,7 +4059,15 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -3175,10 +4076,6 @@
         },
         {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "suspendExpr",
           "named": true
         },
         {
@@ -3230,6 +4127,10 @@
       "required": false,
       "types": [
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -3242,6 +4143,10 @@
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
           "named": true
         },
@@ -3251,10 +4156,6 @@
         },
         {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -3302,6 +4203,10 @@
           "named": true
         },
         {
+          "type": "effectType",
+          "named": true
+        },
+        {
           "type": "existentialType",
           "named": true
         },
@@ -3326,6 +4231,10 @@
           "named": true
         },
         {
+          "type": "guardExpr",
+          "named": true
+        },
+        {
           "type": "holeExpr",
           "named": true
         },
@@ -3343,6 +4252,10 @@
         },
         {
           "type": "interpString",
+          "named": true
+        },
+        {
+          "type": "intrinsicExpr",
           "named": true
         },
         {
@@ -3366,11 +4279,23 @@
           "named": true
         },
         {
+          "type": "nullExpr",
+          "named": true
+        },
+        {
           "type": "operatorSection",
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
+          "named": true
+        },
+        {
+          "type": "qualifiedVar",
           "named": true
         },
         {
@@ -3382,15 +4307,7 @@
           "named": true
         },
         {
-          "type": "suspendExpr",
-          "named": true
-        },
-        {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -3463,6 +4380,10 @@
             "named": false
           },
           {
+            "type": "effectType",
+            "named": true
+          },
+          {
             "type": "existentialType",
             "named": true
           },
@@ -3483,6 +4404,10 @@
             "named": true
           },
           {
+            "type": "optionalType",
+            "named": true
+          },
+          {
             "type": "paramT",
             "named": true
           },
@@ -3492,10 +4417,6 @@
           },
           {
             "type": "taggedType",
-            "named": true
-          },
-          {
-            "type": "thunkType",
             "named": true
           },
           {
@@ -3563,6 +4484,10 @@
             "named": false
           },
           {
+            "type": "effectType",
+            "named": true
+          },
+          {
             "type": "existentialType",
             "named": true
           },
@@ -3583,6 +4508,10 @@
             "named": true
           },
           {
+            "type": "optionalType",
+            "named": true
+          },
+          {
             "type": "paramT",
             "named": true
           },
@@ -3592,10 +4521,6 @@
           },
           {
             "type": "taggedType",
-            "named": true
-          },
-          {
-            "type": "thunkType",
             "named": true
           },
           {
@@ -3609,6 +4534,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "effectType",
+          "named": true
+        },
         {
           "type": "existentialType",
           "named": true
@@ -3626,6 +4555,10 @@
           "named": true
         },
         {
+          "type": "optionalType",
+          "named": true
+        },
+        {
           "type": "paramT",
           "named": true
         },
@@ -3635,10 +4568,6 @@
         },
         {
           "type": "taggedType",
-          "named": true
-        },
-        {
-          "type": "thunkType",
           "named": true
         },
         {
@@ -3655,6 +4584,10 @@
   },
   {
     "type": "!",
+    "named": false
+  },
+  {
+    "type": "%inline",
     "named": false
   },
   {
@@ -3686,6 +4619,14 @@
     "named": false
   },
   {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
     "type": "::",
     "named": false
   },
@@ -3707,6 +4648,10 @@
   },
   {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": "?",
     "named": false
   },
   {
@@ -3800,6 +4745,10 @@
     "named": true
   },
   {
+    "type": "intrinsicExpr",
+    "named": true
+  },
+  {
     "type": "let",
     "named": false
   },
@@ -3811,6 +4760,10 @@
   {
     "type": "module",
     "named": false
+  },
+  {
+    "type": "nullExpr",
+    "named": true
   },
   {
     "type": "objectDef",
