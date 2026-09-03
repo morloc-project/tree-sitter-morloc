@@ -1,112 +1,139 @@
-==============================
-source nothing
-==============================
+============================================================
+source with a term list
+============================================================
 
-source Py ()
-
----
-
-(source_file
-  (source
-    (language
-      (identifierU))))
-
-==============================
-source from builtins
-==============================
-
-source Py ("map" as m, "sum")
+source Py from "a.py" ("foo", "bar")
 
 ---
 
 (source_file
-  (source
-    (language
-      (identifierU))
-    (sourceTerm
-      name: (string)
-      alias: (identifier))
-    (sourceTerm
-      name: (string))))
-
-===============================
-source from file
-===============================
-
-source Py from "foo.py" ("foo")
-
----
-
-(source_file
-  (source
-    (language
-      (identifierU))
-    sourceFile: (string)
-    (sourceTerm
-      name: (string))))
-
-===============================
-source type
-===============================
-
-source Py from "foo.py" ("PersonObj" as Person)
-
----
-
-(source_file
-  (source
-    (language
-      (identifierU))
+  (source_decl
+    (upper)
     (string)
-    (sourceTerm
-      (string)
-      (identifierU))))
+    (source_item
+      (string))
+    (source_item
+      (string))))
 
-===============================
-source lowercase language
-===============================
+============================================================
+source without a file
+============================================================
 
-source py from "foo.py" ("foo")
+source Py ("foo")
 
 ---
 
 (source_file
-  (source
-    (language
-      (identifier))
-    sourceFile: (string)
-    (sourceTerm
-      name: (string))))
+  (source_decl
+    (upper)
+    (source_item
+      (string))))
 
-===============================
-source WHERE form
-===============================
+============================================================
+source with aliases
+============================================================
 
-source Py where
+source Py from "a.py" ("foo" as bar, "Baz" as Qux)
+
+---
+
+(source_file
+  (source_decl
+    (upper)
+    (string)
+    (source_item
+      (string)
+      (lower))
+    (source_item
+      (string)
+      (upper))))
+
+============================================================
+source with an operator
+============================================================
+
+source Py from "a.py" ("add" as (<+>))
+
+---
+
+(source_file
+  (source_decl
+    (upper)
+    (string)
+    (source_item
+      (string)
+      (operator_ref_paren
+        (operator_name
+          (operator))))))
+
+============================================================
+source with a backtick name
+============================================================
+
+source Py from "a.py" (`and` as (&&))
+
+---
+
+(source_file
+  (source_decl
+    (upper)
+    (string)
+    (source_item
+      (backtick_name)
+      (operator_ref_paren
+        (operator_name
+          (operator))))))
+
+============================================================
+source where block
+============================================================
+
+source Py from "a.py" where
   foo
   bar
 
 ---
 
 (source_file
-  (source
-    (language
-      (identifierU))
-    name: (identifier)
-    name: (identifier)))
+  (source_decl
+    (upper)
+    (string)
+    (source_new_item
+      (lower))
+    (source_new_item
+      (lower))))
 
-===============================
-source operator alias
-===============================
+============================================================
+inline pragma
+============================================================
 
-source Py ("add" as (+))
+%inline source Py from "a.py" ("foo")
 
 ---
 
 (source_file
-  (source
-    (language
-      (identifierU))
-    (sourceTerm
-      name: (string)
-      alias: (operator))))
+  (inline_source_decl
+    (source_decl
+      (upper)
+      (string)
+      (source_item
+        (string)))))
+
+============================================================
+inline pragma in a where block
+============================================================
+
+source Py from "a.py" where
+  %inline foo
+  bar
+
+---
+
+(source_file
+  (source_decl
+    (upper)
+    (string)
+    (source_new_item
+      (lower))
+    (source_new_item
+      (lower))))

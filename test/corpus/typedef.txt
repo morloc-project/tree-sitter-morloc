@@ -1,302 +1,268 @@
-===============================
-type Foo a b = big:Bar a small:b
-===============================
+============================================================
+type alias
+============================================================
 
-type Foo a b = big:Bar a small:b
-
----
-
-(source_file
-  (typedef
-    (paramT
-      concrete: (identifierU)
-      generic: (identifier)
-      generic: (identifier))
-    (paramT
-      (taggedType
-        (tag)
-        concrete: (identifierU))
-      generic: (identifier)
-      (taggedType
-        (tag)
-        generic: (identifier)))))
-
-===============================
-type Cpp => Foo a b = big:Bar a small:b
-===============================
-
-type Cpp => Foo a b = big:Bar a small:b
+type Celsius = Int
 
 ---
 
 (source_file
-  (typedef
-    (language
-      (identifierU))
-    (paramT
-      concrete: (identifierU)
-      generic: (identifier)
-      generic: (identifier))
-    (paramT
-      (taggedType
-        (tag)
-        concrete: (identifierU))
-      generic: (identifier)
-      (taggedType
-        (tag)
-        generic: (identifier)))))
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (upper)))
 
-===============================
-parameterized types and sugar
-===============================
+============================================================
+parameterized alias
+============================================================
 
-type Foo b = (A [T] c, b c, [(Int, Bar)])
+type Pair a b = (a, b)
 
 ---
 
 (source_file
-  (typedef
-    (paramT
-      concrete: (identifierU)
-      generic: (identifier))
-    (tupleType
-      (paramT
-        concrete: (identifierU)
-        (listType
-          concrete: (identifierU))
-        generic: (identifier))
-      (paramT
-        generic: (identifier)
-        generic: (identifier))
-      (listType
-        (tupleType
-          concrete: (identifierU)
-          concrete: (identifierU))))))
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower))
+      (typedef_param
+        (lower)))
+    (tuple_type
+      (lower)
+      (lower))))
 
-===============================
-Native typedef
-===============================
+============================================================
+forward declaration
+============================================================
 
-type Cpp => A = "B"
+type Opaque a
 
 ---
 
 (source_file
-  (typedef
-    (language
-      (identifierU))
-    concrete: (identifierU)
-    native: (string)))
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)))))
 
-===============================
-Parameterized native typedef
-===============================
+============================================================
+parenthesized head
+============================================================
 
-type Cpp => A a = "B" a
-
----
-
-(source_file
-  (typedef
-    (language
-      (identifierU))
-    (paramT
-      concrete: (identifierU)
-      generic: (identifier))
-    native: (string)
-    generic: (identifier)))
-
-===============================
-Parameterized record definition
-===============================
-
-record (Person a) = Person {name :: Str, info :: a}
+type (Wrapped a) = [a]
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    name: (identifierU)
-    param: (identifier)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      generic: (identifier))))
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)))
+    (list_type
+      (lower))))
 
-===============================
-Parameterized table definition
-===============================
+============================================================
+kind-annotated parameter
+============================================================
 
-table (Person a) = Person {name :: Str, info :: a}
+type Vec (n :: Nat) a = [a]
 
 ---
 
 (source_file
-  (recdef
-    (tableDef)
-    name: (identifierU)
-    param: (identifier)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      generic: (identifier))))
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)
+        (upper))
+      (typedef_param
+        (lower)))
+    (list_type
+      (lower))))
 
-===============================
-Parameterized object definition
-===============================
+============================================================
+concrete alias
+============================================================
 
-object (Person a) = Person {name :: Str, info :: a}
-
----
-
-(source_file
-  (recdef
-    (objectDef)
-    name: (identifierU)
-    param: (identifier)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      generic: (identifier))))
-
-===============================
-Unparameterized record definition
-===============================
-
-record Person = Person {name :: Str, info :: [Int]}
+type Cpp => Celsius = "int64_t"
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    name: (identifierU)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      value: (listType
-        concrete: (identifierU)))))
+  (typedef_decl
+    (upper)
+    (typedef_term
+      (upper))
+    (concrete_rhs
+      (string))))
 
-===============================
-Parameterized concrete record definition
-===============================
+============================================================
+concrete alias with arguments
+============================================================
 
-record (Person a) = Person {name :: Str, info :: a}
-record Cpp => (Person a) = "person_t"
+type Cpp => Vec a = "std::vector<$1>" a
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    name: (identifierU)
-    param: (identifier)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      generic: (identifier)))
-  (recdef
-    (recordDef)
-    (language
-      (identifierU))
-    name: (identifierU)
-    param: (identifier)
-    constructor: (string)))
+  (typedef_decl
+    (upper)
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)))
+    (concrete_rhs
+      (string)
+      (lower))))
 
-===============================
-Unparameterized concrete record definition
-===============================
+============================================================
+lowercase language tag
+============================================================
 
-record Person = Person {name :: Str, info :: [Int]}
-record cpp => Person = "person_t"
+type py => Celsius = "int"
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    name: (identifierU)
-    constructor: (identifierU)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    entry: (recordTypeEntry
-      key: (identifier)
-      value: (listType
-        concrete: (identifierU))))
-  (recdef
-    (recordDef)
-    (language
-      (identifier))
-    name: (identifierU)
-    constructor: (string)))
+  (typedef_decl
+    (lower)
+    (typedef_term
+      (upper))
+    (concrete_rhs
+      (string))))
 
-===============================
-forward type declaration
-===============================
+============================================================
+newtype
+============================================================
 
-type Foo a
+newtype Meters = Real
 
 ---
 
 (source_file
-  (typedef
-    (paramT
-      concrete: (identifierU)
-      generic: (identifier))))
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (upper)))
 
-===============================
-record WHERE form
-===============================
+============================================================
+primitive newtype
+============================================================
 
-record Foo where
-    name :: Str
-    age :: Int
+newtype Handle a
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    name: (identifierU)
-    (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))
-    (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))))
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)))))
 
-===============================
-string constructor
-===============================
+============================================================
+record inline
+============================================================
 
-record Cpp => Foo = "foo_t" {name :: Str}
+record Person = Person {name :: Str, age :: Int}
 
 ---
 
 (source_file
-  (recdef
-    (recordDef)
-    (language
-      (identifierU))
-    name: (identifierU)
-    constructor: (string)
-    entry: (recordTypeEntry
-      key: (identifier)
-      concrete: (identifierU))))
+  (typedef_decl
+    (nam_type)
+    (typedef_term
+      (upper))
+    (nam_constructor
+      (upper))
+    (nam_entries
+      (nam_entry
+        (lower)
+        (upper))
+      (nam_entry
+        (lower)
+        (upper)))))
+
+============================================================
+record where block
+============================================================
+
+record Person where
+  name :: Str
+  age :: Int
+
+---
+
+(source_file
+  (typedef_decl
+    (nam_type)
+    (typedef_term
+      (upper))
+    (nam_entry
+      (lower)
+      (upper))
+    (nam_entry
+      (lower)
+      (upper))))
+
+============================================================
+concrete record
+============================================================
+
+record Py => Person = "dict" {name :: Str}
+
+---
+
+(source_file
+  (typedef_decl
+    (nam_type)
+    (upper)
+    (typedef_term
+      (upper))
+    (nam_constructor
+      (string))
+    (nam_entries
+      (nam_entry
+        (lower)
+        (upper)))))
+
+============================================================
+object
+============================================================
+
+object Cpp => Person = "person_t" {name :: Str}
+
+---
+
+(source_file
+  (typedef_decl
+    (nam_type)
+    (upper)
+    (typedef_term
+      (upper))
+    (nam_constructor
+      (string))
+    (nam_entries
+      (nam_entry
+        (lower)
+        (upper)))))
+
+============================================================
+record with no fields
+============================================================
+
+record Empty = Empty
+
+---
+
+(source_file
+  (typedef_decl
+    (nam_type)
+    (typedef_term
+      (upper))
+    (nam_constructor
+      (upper))))

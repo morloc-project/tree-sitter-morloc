@@ -1,101 +1,325 @@
-==============================
+============================================================
 field getter
-==============================
+============================================================
 
-x = .name foo
+f = .name x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (application
-      (getterExpr
-        (gdot)
-        (accessorBody
-          (identifier)))
-      (identifier))))
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (lower)))
+      (var_expr
+        (lower)))))
 
-==============================
+============================================================
 index getter
-==============================
+============================================================
 
-x = .1 t
+f = .0 x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (application
-      (getterExpr
-        (gdot)
-        (accessorBody
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
           (integer)))
-      (identifier))))
+      (var_expr
+        (lower)))))
 
-==============================
+============================================================
 chained getter
-==============================
+============================================================
 
-x = .1.2 t
+f = .home.city x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (application
-      (getterExpr
-        (gdot)
-        (accessorBody
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (lower)
+          (accessor_body
+            (lower))))
+      (var_expr
+        (lower)))))
+
+============================================================
+mixed chain
+============================================================
+
+f = .0.name.1 x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
           (integer)
-          (accessorTail
-            (gdot)
-            (accessorBody
+          (accessor_body
+            (lower)
+            (accessor_body
               (integer)))))
-      (identifier))))
+      (var_expr
+        (lower)))))
 
-==============================
-grouped getter
-==============================
+============================================================
+setter
+============================================================
 
-x = .(.0, .1) t
+f = .name = "a"
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (application
-      (getterExpr
-        (gdot)
-        (accessorBody
-          (groupedAccessor
-            (gdot)
-            (accessorBody
-              (integer)))
-          (groupedAccessor
-            (gdot)
-            (accessorBody
-              (integer)))))
-      (identifier))))
+    (lower)
+    (getter_expr
+      (accessor_body
+        (lower)
+        (accessor_set
+          (string))))))
 
-==============================
-getter as argument to map
-==============================
+============================================================
+chained setter
+============================================================
 
-x = map .1 xs
+f = .home.city = "a"
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (application
-      (identifier)
-      (getterExpr
-        (gdot)
-        (accessorBody
+    (lower)
+    (getter_expr
+      (accessor_body
+        (lower)
+        (accessor_body
+          (lower)
+          (accessor_set
+            (string)))))))
+
+============================================================
+group accessor
+============================================================
+
+f = .(.a, .b) x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (grouped_accessor
+            (accessor_body
+              (lower)))
+          (grouped_accessor
+            (accessor_body
+              (lower)))))
+      (var_expr
+        (lower)))))
+
+============================================================
+nested group accessor
+============================================================
+
+f = .(.(.a, .b), .c) x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (grouped_accessor
+            (accessor_body
+              (grouped_accessor
+                (accessor_body
+                  (lower)))
+              (grouped_accessor
+                (accessor_body
+                  (lower)))))
+          (grouped_accessor
+            (accessor_body
+              (lower)))))
+      (var_expr
+        (lower)))))
+
+============================================================
+bracket index
+============================================================
+
+f = .[0] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
           (integer)))
-      (identifier))))
+      (var_expr
+        (lower)))))
+
+============================================================
+closed slice
+============================================================
+
+f = .[1:10] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer)
+            (integer))))
+      (var_expr
+        (lower)))))
+
+============================================================
+open slices
+============================================================
+
+f = .[:5] x
+
+g = .[5:] x
+
+h = .[:] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer))))
+      (var_expr
+        (lower))))
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer))))
+      (var_expr
+        (lower))))
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice)))
+      (var_expr
+        (lower)))))
+
+============================================================
+reversed slice
+============================================================
+
+f = .[::-1] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer))))
+      (var_expr
+        (lower)))))
+
+============================================================
+stepped slice
+============================================================
+
+f = .[1:10:2] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer)
+            (integer)
+            (integer))))
+      (var_expr
+        (lower)))))
+
+============================================================
+multi axis slice
+============================================================
+
+f = .[0, 1:3] x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (integer)
+          (slice
+            (integer)
+            (integer))))
+      (var_expr
+        (lower)))))
+
+============================================================
+slice then field
+============================================================
+
+f = .[1:2].name x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (getter_expr
+        (accessor_body
+          (slice
+            (integer)
+            (integer))
+          (accessor_body
+            (lower))))
+      (var_expr
+        (lower)))))

@@ -1,0 +1,112 @@
+============================================================
+integers
+============================================================
+
+f = [1, 0xFF, 0o17, 0b1010]
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (integer)
+      (integer)
+      (integer)
+      (integer))))
+
+============================================================
+floats
+============================================================
+
+f = [1.5, 1e10, 2.5e-3]
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (float)
+      (float)
+      (float))))
+
+============================================================
+negative literals
+============================================================
+
+f = [-1, -2.5]
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (integer)
+      (float))))
+
+============================================================
+negative literal as an argument
+============================================================
+
+f = g -1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (var_expr
+        (lower))
+      (integer))))
+
+============================================================
+binary minus without spaces
+============================================================
+
+f x = x-1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (infix_expr
+      (var_expr
+        (lower))
+      (integer))))
+
+============================================================
+booleans
+============================================================
+
+f = [True, False]
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (boolean)
+      (boolean))))
+
+============================================================
+non finite reals
+============================================================
+
+f = [Inf, -Inf, NaN]
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (inf)
+      (neg_inf)
+      (nan))))

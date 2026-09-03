@@ -1,6 +1,6 @@
-==============================
-no exported values
-==============================
+============================================================
+module with no exports
+============================================================
 
 module foo ()
 
@@ -8,13 +8,13 @@ module foo ()
 
 (source_file
   (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)))))
+    (module_name
+      (module_comp
+        (lower)))))
 
-===============================
-universal export
-===============================
+============================================================
+module exporting everything
+============================================================
 
 module foo (*)
 
@@ -22,107 +22,187 @@ module foo (*)
 
 (source_file
   (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)))
-    (star)))
+    (module_name
+      (module_comp
+        (lower)))
+    (exports)))
 
-===============================
-multiple export
-===============================
+============================================================
+module with an export list
+============================================================
 
-module foo
- ( a
- , B
- )
+module foo (bar, Baz, (<>))
 
 ---
 
 (source_file
   (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)))
-    (exportItem
-      (identifier))
-    (exportItem
-      (identifierU))))
+    (module_name
+      (module_comp
+        (lower)))
+    (exports
+      (export_item
+        (lower))
+      (export_item
+        (upper))
+      (export_item
+        (operator_ref_paren
+          (operator_name
+            (operator)))))))
 
-===============================
-multi-segment module paths
-===============================
+============================================================
+dotted module name
+============================================================
 
-module lib (a)
-module lib.foo (a)
-module lib.foo.bar (a)
-
----
-
-(source_file
-  (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)))
-    (exportItem
-      (identifier)))
-  (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier))
-      segment: (moduleComponent
-        (identifier)))
-    (exportItem
-      (identifier)))
-  (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier))
-      segment: (moduleComponent
-        (identifier))
-      segment: (moduleComponent
-        (identifier)))
-    (exportItem
-      (identifier))))
-
-===============================
-hyphenated module name
-===============================
-
-module foo-bar.baz-qux (a)
+module foo.bar.baz (x)
 
 ---
 
 (source_file
   (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)
-        (identifier))
-      segment: (moduleComponent
-        (identifier)
-        (identifier)))
-    (exportItem
-      (identifier))))
+    (module_name
+      (module_comp
+        (lower))
+      (module_comp
+        (lower))
+      (module_comp
+        (lower)))
+    (exports
+      (export_item
+        (lower)))))
 
-===============================
-operator export
-===============================
+============================================================
+dashed module name
+============================================================
 
-module foo (a, (+), (-), (.))
+module foo-bar (x)
 
 ---
 
 (source_file
   (module
-    modulePath: (modulePath
-      segment: (moduleComponent
-        (identifier)))
-    (exportItem
-      (identifier))
-    (exportItem
-      (operatorExport
-        (operator)))
-    (exportItem
-      (operatorExport))
-    (exportItem
-      (operatorExport))))
+    (module_name
+      (module_comp
+        (lower)
+        (lower)))
+    (exports
+      (export_item
+        (lower)))))
+
+============================================================
+anonymous module
+============================================================
+
+module (x)
+
+x = 1
+
+---
+
+(source_file
+  (module
+    (exports
+      (export_item
+        (lower)))
+    (declaration
+      (lower)
+      (integer))))
+
+============================================================
+two modules in one file
+============================================================
+
+module a (x)
+
+x = 1
+
+module b (y)
+
+y = 2
+
+---
+
+(source_file
+  (module
+    (module_name
+      (module_comp
+        (lower)))
+    (exports
+      (export_item
+        (lower)))
+    (declaration
+      (lower)
+      (integer)))
+  (module
+    (module_name
+      (module_comp
+        (lower)))
+    (exports
+      (export_item
+        (lower)))
+    (declaration
+      (lower)
+      (integer))))
+
+============================================================
+implicit main
+============================================================
+
+x = 1
+
+y = 2
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (integer))
+  (declaration
+    (lower)
+    (integer)))
+
+============================================================
+trailing expression
+============================================================
+
+import root-py
+1 + 2
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower)))))
+  (trailing_expr
+    (infix_expr
+      (integer)
+      (operator_name)
+      (integer))))
+
+============================================================
+explicit braces for the body
+============================================================
+
+module a (x) { x = 1; y = 2 }
+
+---
+
+(source_file
+  (module
+    (module_name
+      (module_comp
+        (lower)))
+    (exports
+      (export_item
+        (lower)))
+    (declaration
+      (lower)
+      (integer))
+    (declaration
+      (lower)
+      (integer))))

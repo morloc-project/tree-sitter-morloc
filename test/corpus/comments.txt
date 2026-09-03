@@ -1,73 +1,111 @@
-==============================
+============================================================
 line comment
-===============================
+============================================================
 
-  -- this is a comment
-  -- this is a comment
-x = 1 -- a
--- d
--- b
+-- a comment
+f = 1
 
 ---
 
 (source_file
-  (lineComment)
-  (lineComment)
+  (comment)
   (declaration
-    lhs: (identifier)
-    rhs: (integer))
-  (lineComment)
-  (lineComment)
-  (lineComment))
+    (lower)
+    (integer)))
 
+============================================================
+trailing comment
+============================================================
 
-==============================
-block comment
-===============================
-
-
-{- { } -}
-x = {- sdf df -} 1 -- hi
-{-  df
- er -}
+f = 1 -- trailing
 
 ---
 
 (source_file
-  (blockComment)
   (declaration
-    lhs: (identifier)
-    (blockComment)
-    rhs: (integer))
-  (lineComment)
-  (blockComment))
+    (lower)
+    (integer))
+  (comment))
 
-==============================
+============================================================
 doc comment
-===============================
+============================================================
 
---' This is a doc comment
-x = 1
+--' documentation
+f = 1
 
 ---
 
 (source_file
-  (docComment)
+  (doc_comment)
   (declaration
-    lhs: (identifier)
-    rhs: (integer)))
+    (lower)
+    (integer)))
 
-==============================
+============================================================
 group comment
-===============================
+============================================================
 
---* name: Core Functions
-x = 1
+--* group
+f = 1
 
 ---
 
 (source_file
-  (groupComment)
+  (group_comment)
   (declaration
-    lhs: (identifier)
-    rhs: (integer)))
+    (lower)
+    (integer)))
+
+============================================================
+block comment
+============================================================
+
+{- a block
+   comment -}
+f = 1
+
+---
+
+(source_file
+  (comment)
+  (declaration
+    (lower)
+    (integer)))
+
+============================================================
+nested block comment
+============================================================
+
+{- outer {- inner -} outer -}
+f = 1
+
+---
+
+(source_file
+  (comment)
+  (declaration
+    (lower)
+    (integer)))
+
+============================================================
+comment inside a where block
+============================================================
+
+f = a
+  where
+    -- note
+    a = 1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (where_block
+      (comment)
+      (declaration
+        (lower)
+        (integer)))))

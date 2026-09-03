@@ -1,78 +1,301 @@
-==============================
-existential type
-==============================
+============================================================
+function type
+============================================================
 
-f :: <a> -> Int
-
----
-
-(source_file
-  (signature
-    name: (identifier)
-    value: (sigType
-      (functionT
-        (existentialType
-          (identifier))
-        concrete: (identifierU)))))
-
-==============================
-thunk type
-==============================
-
-f :: {Int} -> Int
+f :: Int -> Str -> Bool
 
 ---
 
 (source_file
   (signature
-    name: (identifier)
-    value: (sigType
-      (functionT
-        (thunkType
-          concrete: (identifierU))
-        concrete: (identifierU)))))
+    (lower)
+    (sig_type
+      (function_type
+        (upper)
+        (function_type
+          (upper)
+          (upper))))))
 
-==============================
-constraint in signature
-==============================
+============================================================
+list and tuple types
+============================================================
 
-f a :: Num a => a -> a
-
----
-
-(source_file
-  (signature
-    name: (identifier)
-    arg: (identifier)
-    value: (sigType
-      (constraints
-        (constraint
-          (identifierU)
-          generic: (identifier)))
-      (functionT
-        generic: (identifier)
-        generic: (identifier)))))
-
-==============================
-multiple constraints
-==============================
-
-f a :: (Num a, Show a) => a -> Str
+f :: [Int] -> (Int, Str) -> ()
 
 ---
 
 (source_file
   (signature
-    name: (identifier)
-    arg: (identifier)
-    value: (sigType
-      (constraints
-        (constraint
-          (identifierU)
-          generic: (identifier))
-        (constraint
-          (identifierU)
-          generic: (identifier)))
-      (functionT
-        generic: (identifier)
-        concrete: (identifierU)))))
+    (lower)
+    (sig_type
+      (function_type
+        (list_type
+          (upper))
+        (function_type
+          (tuple_type
+            (upper)
+            (upper))
+          (unit_type))))))
+
+============================================================
+applied type
+============================================================
+
+f :: Map Str [Int]
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (apply_type
+        (apply_type
+          (upper)
+          (upper))
+        (list_type
+          (upper))))))
+
+============================================================
+optional type
+============================================================
+
+f :: ?[Int] -> ?Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (optional_type
+          (list_type
+            (upper)))
+        (optional_type
+          (upper))))))
+
+============================================================
+anonymous record type
+============================================================
+
+f :: {name = Str, age = Int}
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (record_type
+        (record_type_entry
+          (lower)
+          (upper))
+        (record_type_entry
+          (lower)
+          (upper))))))
+
+============================================================
+empty record type
+============================================================
+
+f :: {}
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (record_type))))
+
+============================================================
+tick list type
+============================================================
+
+f :: Select ['x, 'y]
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (apply_type
+        (upper)
+        (tick_list_type
+          (tick_name)
+          (tick_name))))))
+
+============================================================
+labeled type
+============================================================
+
+f :: lbl@Int -> Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (labeled_type
+          (lower)
+          (upper))
+        (upper)))))
+
+============================================================
+nat arithmetic
+============================================================
+
+f :: Vector (n + 1) Int -> Vector (n * 2 - 1) Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (apply_type
+          (apply_type
+            (upper)
+            (paren_type
+              (nat_add_type
+                (lower)
+                (integer))))
+          (upper))
+        (apply_type
+          (apply_type
+            (upper)
+            (paren_type
+              (nat_add_type
+                (nat_mul_type
+                  (lower)
+                  (integer))
+                (integer))))
+          (upper))))))
+
+============================================================
+effect type
+============================================================
+
+f :: <IO, Err> Int -> <IO> Str
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (effect_type
+          (effect_row
+            (upper)
+            (upper))
+          (upper))
+        (effect_type
+          (effect_row
+            (upper))
+          (upper))))))
+
+============================================================
+effect row with a tail variable
+============================================================
+
+f :: <IO, e> Int -> Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (effect_type
+          (effect_row
+            (upper)
+            (lower))
+          (upper))
+        (upper)))))
+
+============================================================
+constrained signature
+============================================================
+
+f :: (Ord a, Eq b) => a -> b -> Bool
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (tuple_type
+        (apply_type
+          (upper)
+          (lower))
+        (apply_type
+          (upper)
+          (lower)))
+      (function_type
+        (lower)
+        (function_type
+          (lower)
+          (upper))))))
+
+============================================================
+single constraint
+============================================================
+
+f :: Ord a => a -> a -> Bool
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (apply_type
+        (upper)
+        (lower))
+      (function_type
+        (lower)
+        (function_type
+          (lower)
+          (upper))))))
+
+============================================================
+concrete type name
+============================================================
+
+f :: "int64_t" -> Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (string)
+        (upper)))))
+
+============================================================
+nat literal argument
+============================================================
+
+f :: Vector 4 Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (apply_type
+        (apply_type
+          (upper)
+          (integer))
+        (upper)))))

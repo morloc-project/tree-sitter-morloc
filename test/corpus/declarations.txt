@@ -1,0 +1,318 @@
+============================================================
+signature
+============================================================
+
+f :: Int -> Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (upper)
+        (upper)))))
+
+============================================================
+operator signature
+============================================================
+
+(<+>) :: Int -> Int -> Int
+
+---
+
+(source_file
+  (signature
+    (operator_ref_paren
+      (operator_name
+        (operator)))
+    (sig_type
+      (function_type
+        (upper)
+        (function_type
+          (upper)
+          (upper))))))
+
+============================================================
+simple declaration
+============================================================
+
+f x = x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))))
+
+============================================================
+declaration with several parameters
+============================================================
+
+f x y z = x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))))
+
+============================================================
+pattern parameters
+============================================================
+
+f (x, y) {a = b} = x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (tuple_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (lower)))
+    (record_expr
+      (record_entry
+        (lower)
+        (var_expr
+          (lower))))
+    (var_expr
+      (lower))))
+
+============================================================
+operator declaration
+============================================================
+
+(<+>) a b = a + b
+
+---
+
+(source_file
+  (declaration
+    (operator_ref_paren
+      (operator_name
+        (operator)))
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))
+    (infix_expr
+      (var_expr
+        (lower))
+      (operator_name)
+      (var_expr
+        (lower)))))
+
+============================================================
+guarded declaration
+============================================================
+
+f x ? x > 0 = 1
+      ? x < 0 = 2
+      : 0
+
+---
+
+(source_file
+  (guarded_declaration
+    (lower)
+    (var_expr
+      (lower))
+    (guard_clause
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name)
+        (integer))
+      (integer))
+    (guard_clause
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name)
+        (integer))
+      (integer))
+    (integer)))
+
+============================================================
+guards at the block indent
+============================================================
+
+f x = do
+  ? x > 0 = 1
+  ? x < 0 = 2
+  : 0
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (do_expr
+      (guard_expr
+        (guard_clause
+          (infix_expr
+            (var_expr
+              (lower))
+            (operator_name)
+            (integer))
+          (integer))
+        (guard_clause
+          (infix_expr
+            (var_expr
+              (lower))
+            (operator_name)
+            (integer))
+          (integer))
+        (integer)))))
+
+============================================================
+refutable pattern clauses
+============================================================
+
+f
+  | (x, y) = x
+  | z = z
+
+---
+
+(source_file
+  (pattern_declaration
+    (lower)
+    (pattern_clause
+      (tuple_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower)))
+      (var_expr
+        (lower)))
+    (pattern_clause
+      (var_expr
+        (lower))
+      (var_expr
+        (lower)))))
+
+============================================================
+pattern clause with guards
+============================================================
+
+f
+  | x ? x > 0 = 1
+      : 0
+
+---
+
+(source_file
+  (pattern_declaration
+    (lower)
+    (pattern_clause
+      (var_expr
+        (lower))
+      (guard_clause
+        (infix_expr
+          (var_expr
+            (lower))
+          (operator_name)
+          (integer))
+        (integer))
+      (integer))))
+
+============================================================
+where block
+============================================================
+
+f x = a + b
+  where
+    a = 1
+    b = 2
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (infix_expr
+      (var_expr
+        (lower))
+      (operator_name)
+      (var_expr
+        (lower)))
+    (where_block
+      (declaration
+        (lower)
+        (integer))
+      (declaration
+        (lower)
+        (integer)))))
+
+============================================================
+where block with a signature
+============================================================
+
+f x = a
+  where
+    a :: Int
+    a = 1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))
+    (where_block
+      (signature
+        (lower)
+        (sig_type
+          (upper)))
+      (declaration
+        (lower)
+        (integer)))))
+
+============================================================
+inline where with explicit braces
+============================================================
+
+f = a + b where { a = 10; b = 20 }
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (infix_expr
+      (var_expr
+        (lower))
+      (operator_name)
+      (var_expr
+        (lower)))
+    (where_block
+      (declaration
+        (lower)
+        (integer))
+      (declaration
+        (lower)
+        (integer)))))

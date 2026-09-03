@@ -1,0 +1,144 @@
+============================================================
+bare import
+============================================================
+
+import root-py
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower))))))
+
+============================================================
+import with a term list
+============================================================
+
+import root-py (map, fold)
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower))))
+    (import_list
+      (import_item
+        (lower))
+      (import_item
+        (lower)))))
+
+============================================================
+import with an empty list
+============================================================
+
+import root-py ()
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower))))
+    (import_list)))
+
+============================================================
+import with aliases
+============================================================
+
+import root-py (map as m, Foo as Bar, (<>) as cat)
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower))))
+    (import_list
+      (import_item
+        (lower)
+        (lower))
+      (import_item
+        (upper)
+        (upper))
+      (import_item
+        (operator_ref_paren
+          (operator_name
+            (operator)))
+        (lower)))))
+
+============================================================
+qualified import
+============================================================
+
+import root-py as r
+
+f = r.map
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_name
+        (module_comp
+          (lower)
+          (lower))))
+    (lower))
+  (declaration
+    (lower)
+    (var_expr
+      (lower)
+      (lower))))
+
+============================================================
+relative import
+============================================================
+
+import .helpers (foo)
+
+---
+
+(source_file
+  (import_decl
+    (module_name
+      (module_comp
+        (lower)))
+    (import_list
+      (import_item
+        (lower)))))
+
+============================================================
+namespaced import
+============================================================
+
+import owner/pkg.mod (foo)
+
+---
+
+(source_file
+  (import_decl
+    (import_module_name
+      (module_comp
+        (lower))
+      (module_name
+        (module_comp
+          (lower))
+        (module_comp
+          (lower))))
+    (import_list
+      (import_item
+        (lower)))))

@@ -1,0 +1,206 @@
+============================================================
+plain string
+============================================================
+
+f = "hello"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+empty string
+============================================================
+
+f = ""
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+escapes
+============================================================
+
+f = "a\nb\"c"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+triple quoted
+============================================================
+
+f = """line one
+line two"""
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+triple single quoted
+============================================================
+
+f = '''it's here'''
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+quote before the closing delimiter
+============================================================
+
+f = """bar - "foo""""
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+seven quotes
+============================================================
+
+f = """""""
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (string)))
+
+============================================================
+interpolation
+============================================================
+
+f x = "a#{x}b"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (interp_string
+      (string_start)
+      (var_expr
+        (lower))
+      (string_end))))
+
+============================================================
+several splices
+============================================================
+
+f x y = "#{x}+#{y}=#{x}#{y}"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (var_expr
+      (lower))
+    (interp_string
+      (string_start)
+      (var_expr
+        (lower))
+      (string_mid)
+      (var_expr
+        (lower))
+      (string_mid)
+      (var_expr
+        (lower))
+      (string_mid)
+      (var_expr
+        (lower))
+      (string_end))))
+
+============================================================
+splice with an expression
+============================================================
+
+f x = "n=#{g x + 1}"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (interp_string
+      (string_start)
+      (infix_expr
+        (apply_expr
+          (var_expr
+            (lower))
+          (var_expr
+            (lower)))
+        (operator_name)
+        (integer))
+      (string_end))))
+
+============================================================
+splice holding a record
+============================================================
+
+f x = "r=#{ {a = x} }"
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (interp_string
+      (string_start)
+      (record_expr
+        (record_entry
+          (lower)
+          (var_expr
+            (lower))))
+      (string_end))))
+
+============================================================
+interpolation in a triple quoted string
+============================================================
+
+f x = """v: #{x}"""
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (interp_string
+      (string_start)
+      (var_expr
+        (lower))
+      (string_end))))

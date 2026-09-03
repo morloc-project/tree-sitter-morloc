@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-morloc
 HOMEPAGE_URL := https://github.com/morloc-project/morloc
-VERSION := 0.1.0
+VERSION := 0.3.0
 
 # repository
 SRC_DIR := src

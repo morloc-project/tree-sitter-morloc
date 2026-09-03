@@ -1,256 +1,642 @@
-==============================
-force expression
-==============================
+============================================================
+application
+============================================================
 
-x = !y
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (forceExpr
-      (identifier))))
-
-==============================
-suspend expression
-==============================
-
-x = {y}
+f = g x y
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (suspendExpr
-      (identifier))))
+    (lower)
+    (apply_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (lower))
+      (var_expr
+        (lower)))))
 
-==============================
-hole expression
-==============================
+============================================================
+infix operator
+============================================================
 
-x = _
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (holeExpr)))
-
-==============================
-unit expression
-==============================
-
-x = ()
+f = a <> b <> c
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (unitExpr)))
+    (lower)
+    (infix_expr
+      (var_expr
+        (lower))
+      (operator_name
+        (operator))
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name
+          (operator))
+        (var_expr
+          (lower))))))
 
-==============================
-negative integer
-==============================
+============================================================
+composition and subtraction
+============================================================
 
-x = -42
+f = g . h
+
+g = a - b
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (negativeExpr
+    (lower)
+    (infix_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (lower))))
+  (declaration
+    (lower)
+    (infix_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (lower)))))
+
+============================================================
+unary minus
+============================================================
+
+f = -x
+
+g = - (a + b)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (negate_expr
+      (var_expr
+        (lower))))
+  (declaration
+    (lower)
+    (negate_expr
+      (paren_expr
+        (infix_expr
+          (var_expr
+            (lower))
+          (operator_name)
+          (var_expr
+            (lower)))))))
+
+============================================================
+operator section
+============================================================
+
+f = (+)
+
+g = (.)
+
+h = (-)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (operator_section
+      (operator_name)))
+  (declaration
+    (lower)
+    (operator_section))
+  (declaration
+    (lower)
+    (operator_section)))
+
+============================================================
+left section
+============================================================
+
+f = (+ 1)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (left_section
+      (operator_name)
       (integer))))
 
-==============================
-negative float
-==============================
+============================================================
+right section
+============================================================
 
-x = -3.14
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (negativeExpr
-      (float))))
-
-==============================
-operator section
-==============================
-
-x = (+)
+f = (1 +)
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (operatorSection
-      (operator))))
+    (lower)
+    (right_section
+      (integer)
+      (operator_name))))
 
-==============================
-minus section
-==============================
+============================================================
+lambda
+============================================================
 
-x = (-)
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (operatorSection)))
-
-==============================
-dot section
-==============================
-
-x = (.)
+f = \x y -> x + y
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (operatorSection)))
+    (lower)
+    (lambda_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (lower))
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name)
+        (var_expr
+          (lower))))))
 
-==============================
-force and suspend nested
-==============================
+============================================================
+lambda with a pattern parameter
+============================================================
 
-x = !{42}
+f = \(x, y) -> x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (forceExpr
-      (suspendExpr
+    (lower)
+    (lambda_expr
+      (tuple_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower)))
+      (var_expr
+        (lower)))))
+
+============================================================
+let expression
+============================================================
+
+f =
+  let a = 1
+      b = 2
+  in a + b
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (let_expr
+      (let_binding
+        (var_expr
+          (lower))
+        (integer))
+      (let_binding
+        (var_expr
+          (lower))
+        (integer))
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name)
+        (var_expr
+          (lower))))))
+
+============================================================
+nested let
+============================================================
+
+f =
+  let a = 1
+  let b = 2
+  in a + b
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (let_expr
+      (let_binding
+        (var_expr
+          (lower))
+        (integer))
+      (let_expr
+        (let_binding
+          (var_expr
+            (lower))
+          (integer))
+        (infix_expr
+          (var_expr
+            (lower))
+          (operator_name)
+          (var_expr
+            (lower)))))))
+
+============================================================
+let with explicit braces
+============================================================
+
+f = let { a = 1; b = 2 } in a + b
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (let_expr
+      (let_binding
+        (var_expr
+          (lower))
+        (integer))
+      (let_binding
+        (var_expr
+          (lower))
+        (integer))
+      (infix_expr
+        (var_expr
+          (lower))
+        (operator_name)
+        (var_expr
+          (lower))))))
+
+============================================================
+let binding with guards
+============================================================
+
+f x =
+  let r ? x > 0 = x
+        : 0
+  in r
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (let_expr
+      (let_binding
+        (lower)
+        (guard_clause
+          (infix_expr
+            (var_expr
+              (lower))
+            (operator_name)
+            (integer))
+          (var_expr
+            (lower)))
+        (integer))
+      (var_expr
+        (lower)))))
+
+============================================================
+let binding with a pattern
+============================================================
+
+f = let (a, b) = g 1 in a
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (let_expr
+      (let_binding
+        (tuple_expr
+          (var_expr
+            (lower))
+          (var_expr
+            (lower)))
+        (apply_expr
+          (var_expr
+            (lower))
+          (integer)))
+      (var_expr
+        (lower)))))
+
+============================================================
+do block
+============================================================
+
+f = do
+  x <- g 1
+  h x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (do_bind
+        (var_expr
+          (lower))
+        (apply_expr
+          (var_expr
+            (lower))
+          (integer)))
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))))
+
+============================================================
+do block with a let
+============================================================
+
+f = do
+  let a = 1
+  h a
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (do_let
+        (let_binding
+          (var_expr
+            (lower))
+          (integer)))
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))))
+
+============================================================
+do block with explicit braces
+============================================================
+
+f = do { x <- g 1; h x }
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (do_bind
+        (var_expr
+          (lower))
+        (apply_expr
+          (var_expr
+            (lower))
+          (integer)))
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))))
+
+============================================================
+inline guard expression
+============================================================
+
+f x = ? x > 0 = 1 : 0
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (guard_expr
+      (guard_clause
+        (infix_expr
+          (var_expr
+            (lower))
+          (operator_name)
+          (integer))
+        (integer))
+      (integer))))
+
+============================================================
+type annotation
+============================================================
+
+f = (g x :: Int)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (paren_expr
+      (annotation_expr
+        (apply_expr
+          (var_expr
+            (lower))
+          (var_expr
+            (lower)))
+        (upper)))))
+
+============================================================
+list literal
+============================================================
+
+f = [1, 2, 3]
+
+g = []
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (list_expr
+      (integer)
+      (integer)
+      (integer)))
+  (declaration
+    (lower)
+    (list_expr)))
+
+============================================================
+tuple literal
+============================================================
+
+f = (1, "a", True)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (tuple_expr
+      (integer)
+      (string)
+      (boolean))))
+
+============================================================
+record literal
+============================================================
+
+f = {name = "a", age = 3}
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (record_expr
+      (record_entry
+        (lower)
+        (string))
+      (record_entry
+        (lower)
         (integer)))))
 
-==============================
-let expression
-==============================
+============================================================
+unit literal
+============================================================
 
-x = let a = 5 in a
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (letExpr
-      (letBinding
-        (identifier)
-        (integer))
-      (identifier))))
-
-==============================
-sequential let bindings
-==============================
-
-x = let a = 1 let b = 2 in a
+f = ()
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (letExpr
-      (letBinding
-        (identifier)
-        (integer))
-      (letBinding
-        (identifier)
-        (integer))
-      (identifier))))
+    (lower)
+    (unit_expr)))
 
-==============================
-let with hole binding
-==============================
+============================================================
+wildcard binding
+============================================================
 
-x = let _ = foo in bar
+f = let _ = g 1 in 2
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (letExpr
-      (letBinding
-        (identifier))
-      (identifier))))
+    (lower)
+    (let_expr
+      (let_binding
+        (wildcard)
+        (apply_expr
+          (var_expr
+            (lower))
+          (integer)))
+      (integer))))
 
-==============================
-type annotation
-==============================
+============================================================
+as pattern
+============================================================
 
-x = foo :: Int
-
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (typeAnnotation
-      (identifier)
-      concrete: (identifierU))))
-
-==============================
-hex integer
-==============================
-
-x = 0xFF
+f lst@(x, y) = lst
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (integer)))
+    (lower)
+    (as_expr
+      (lower)
+      (tuple_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))
+    (var_expr
+      (lower))))
 
-==============================
-octal integer
-==============================
+============================================================
+force sugar
+============================================================
 
-x = 0o77
+f x = g !x
 
----
-
-(source_file
-  (declaration
-    lhs: (identifier)
-    rhs: (integer)))
-
-==============================
-binary integer
-==============================
-
-x = 0b1010
+h x = !!x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (integer)))
+    (lower)
+    (var_expr
+      (lower))
+    (apply_expr
+      (var_expr
+        (lower))
+      (force_expr
+        (var_expr
+          (lower)))))
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (force_expr
+      (force_expr
+        (var_expr
+          (lower))))))
 
-==============================
-scientific float
-==============================
+============================================================
+intrinsic
+============================================================
 
-x = 1e10
+f x = @show x
 
 ---
 
 (source_file
   (declaration
-    lhs: (identifier)
-    rhs: (float)))
+    (lower)
+    (var_expr
+      (lower))
+    (apply_expr
+      (intrinsic)
+      (var_expr
+        (lower)))))
+
+============================================================
+null literal
+============================================================
+
+f = Null
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (null_expr)))
+
+============================================================
+qualified variable
+============================================================
+
+f = r.map
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower)
+      (lower))))

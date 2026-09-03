@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-morloc
-        VERSION "0.1.0"
+        VERSION "0.3.0"
         DESCRIPTION "A parser for the Morloc language"
         HOMEPAGE_URL "https://github.com/morloc-project/morloc"
         LANGUAGES C)

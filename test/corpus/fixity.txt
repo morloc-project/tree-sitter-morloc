@@ -1,42 +1,75 @@
-==============================
-infixl declaration
-==============================
+============================================================
+left associative
+============================================================
 
 infixl 6 (+), (-)
 
 ---
 
 (source_file
-  (fixity
-    precedence: (integer)
-    (operatorRef
-      (operator))
-    (operatorRef)))
+  (fixity_decl
+    (integer)
+    (operator_ref
+      (operator_ref_paren
+        (operator_name)))
+    (operator_ref
+      (operator_ref_paren))))
 
-==============================
-infixr declaration
-==============================
+============================================================
+right associative
+============================================================
 
 infixr 5 (<>)
 
 ---
 
 (source_file
-  (fixity
-    precedence: (integer)
-    (operatorRef
-      (operator))))
+  (fixity_decl
+    (integer)
+    (operator_ref
+      (operator_ref_paren
+        (operator_name
+          (operator))))))
 
-==============================
-infix declaration
-==============================
+============================================================
+non associative
+============================================================
 
 infix 4 (==)
 
 ---
 
 (source_file
-  (fixity
-    precedence: (integer)
-    (operatorRef
-      (operator))))
+  (fixity_decl
+    (integer)
+    (operator_ref
+      (operator_ref_paren
+        (operator_name
+          (operator))))))
+
+============================================================
+bare operator
+============================================================
+
+infixl 9 .
+
+---
+
+(source_file
+  (fixity_decl
+    (integer)
+    (operator_ref)))
+
+============================================================
+named function
+============================================================
+
+infixl 7 div
+
+---
+
+(source_file
+  (fixity_decl
+    (integer)
+    (operator_ref
+      (lower))))

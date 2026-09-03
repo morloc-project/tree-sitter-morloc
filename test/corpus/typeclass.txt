@@ -1,67 +1,196 @@
-===============================
-Packable class
-===============================
+============================================================
+class with no body
+============================================================
 
-class Packable a b where
-  pack :: a -> b
-  unpack :: b -> a
+class Show a
 
 ---
 
 (source_file
-  (typeclass
-    class: (identifierU)
-    generic: (identifier)
-    generic: (identifier)
-    where: (interface
-      (signature
-        name: (identifier)
-        value: (sigType
-          (functionT
-            generic: (identifier)
-            generic: (identifier))))
-      (signature
-        name: (identifier)
-        value: (sigType
-          (functionT
-            generic: (identifier)
-            generic: (identifier)))))))
+  (typeclass_decl
+    (class_head
+      (apply_type
+        (upper)
+        (lower)))))
 
-===============================
-constrained class
-===============================
+============================================================
+class with signatures
+============================================================
+
+class Show a where
+  show :: a -> Str
+  read :: Str -> a
+
+---
+
+(source_file
+  (typeclass_decl
+    (class_head
+      (apply_type
+        (upper)
+        (lower)))
+    (signature
+      (lower)
+      (sig_type
+        (function_type
+          (lower)
+          (upper))))
+    (signature
+      (lower)
+      (sig_type
+        (function_type
+          (upper)
+          (lower))))))
+
+============================================================
+class with a superclass
+============================================================
 
 class Eq a => Ord a where
-  compare :: a -> a -> Int
+  cmp :: a -> a -> Int
 
 ---
 
 (source_file
-  (typeclass
-    (constraints
-      (constraint
-        (identifierU)
-        generic: (identifier)))
-    class: (identifierU)
-    generic: (identifier)
-    where: (interface
-      (signature
-        name: (identifier)
-        value: (sigType
-          (functionT
-            generic: (identifier)
-            generic: (identifier)
-            concrete: (identifierU)))))))
+  (typeclass_decl
+    (class_head
+      (apply_type
+        (upper)
+        (lower))
+      (apply_type
+        (upper)
+        (lower)))
+    (signature
+      (lower)
+      (sig_type
+        (function_type
+          (lower)
+          (function_type
+            (lower)
+            (upper)))))))
 
-===============================
-class without where
-===============================
+============================================================
+class with several superclasses
+============================================================
 
-class Foo a
+class (Eq a, Show a) => Ord a where
+  cmp :: a -> a -> Int
 
 ---
 
 (source_file
-  (typeclass
-    class: (identifierU)
-    generic: (identifier)))
+  (typeclass_decl
+    (class_head
+      (tuple_type
+        (apply_type
+          (upper)
+          (lower))
+        (apply_type
+          (upper)
+          (lower)))
+      (apply_type
+        (upper)
+        (lower)))
+    (signature
+      (lower)
+      (sig_type
+        (function_type
+          (lower)
+          (function_type
+            (lower)
+            (upper)))))))
+
+============================================================
+instance with no body
+============================================================
+
+instance Show Int
+
+---
+
+(source_file
+  (instance_decl
+    (instance_head
+      (upper)
+      (upper))))
+
+============================================================
+instance with a body
+============================================================
+
+instance Show Int where
+  source Py from "a.py" ("showInt" as show)
+
+---
+
+(source_file
+  (instance_decl
+    (instance_head
+      (upper)
+      (upper))
+    (source_decl
+      (upper)
+      (string)
+      (source_item
+        (string)
+        (lower)))))
+
+============================================================
+instance with several heads
+============================================================
+
+instance Show Int, Show Str where
+  show x = "?"
+
+---
+
+(source_file
+  (instance_decl
+    (instance_head
+      (upper)
+      (upper))
+    (instance_head
+      (upper)
+      (upper))
+    (declaration
+      (lower)
+      (var_expr
+        (lower))
+      (string))))
+
+============================================================
+effect declaration
+============================================================
+
+effect IO
+
+---
+
+(source_file
+  (effect_decl
+    (upper)))
+
+============================================================
+effect declaration list
+============================================================
+
+effect IO, Err
+
+---
+
+(source_file
+  (effect_decl
+    (upper)
+    (upper)))
+
+============================================================
+escapable effect
+============================================================
+
+escapable effect Err
+
+---
+
+(source_file
+  (effect_decl
+    (upper)))
