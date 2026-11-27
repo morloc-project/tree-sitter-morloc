@@ -1,0 +1,353 @@
+============================================================
+block ends before a comma
+============================================================
+
+k x = (do f x, 1)
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (tuple_expr
+      (do_expr
+        (apply_expr
+          (var_expr
+            (lower))
+          (var_expr
+            (lower))))
+      (integer))))
+
+============================================================
+block ends before a guard default
+============================================================
+
+m c = ? c = do f x : g x
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (guard_expr
+      (guard_clause
+        (var_expr
+          (lower))
+        (do_expr
+          (apply_expr
+            (var_expr
+              (lower))
+            (var_expr
+              (lower)))))
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))))
+
+============================================================
+block ends before an explicit semicolon
+============================================================
+
+a = do { y <- do f x; y }
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (do_bind
+        (var_expr
+          (lower))
+        (do_expr
+          (apply_expr
+            (var_expr
+              (lower))
+            (var_expr
+              (lower)))))
+      (var_expr
+        (lower)))))
+
+============================================================
+block ends before where
+============================================================
+
+t x = do f x where
+  f = 1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (do_expr
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))
+    (where_block
+      (declaration
+        (lower)
+        (integer)))))
+
+============================================================
+record literal after do
+============================================================
+
+r = do { a = 1 }
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (record_expr
+        (record_entry
+          (lower)
+          (integer))))))
+
+============================================================
+string hole at the start of a line
+============================================================
+
+b = """
+#{x}
+  done"""
+c = 1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (interp_string
+      (string_start)
+      (var_expr
+        (lower))
+      (string_end)))
+  (declaration
+    (lower)
+    (integer)))
+
+============================================================
+deep nesting
+============================================================
+
+f = ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((x))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (paren_expr
+      (paren_expr
+        (paren_expr
+          (paren_expr
+            (paren_expr
+              (paren_expr
+                (paren_expr
+                  (paren_expr
+                    (paren_expr
+                      (paren_expr
+                        (paren_expr
+                          (paren_expr
+                            (paren_expr
+                              (paren_expr
+                                (paren_expr
+                                  (paren_expr
+                                    (paren_expr
+                                      (paren_expr
+                                        (paren_expr
+                                          (paren_expr
+                                            (paren_expr
+                                              (paren_expr
+                                                (paren_expr
+                                                  (paren_expr
+                                                    (paren_expr
+                                                      (paren_expr
+                                                        (paren_expr
+                                                          (paren_expr
+                                                            (paren_expr
+                                                              (paren_expr
+                                                                (paren_expr
+                                                                  (paren_expr
+                                                                    (paren_expr
+                                                                      (paren_expr
+                                                                        (paren_expr
+                                                                          (paren_expr
+                                                                            (paren_expr
+                                                                              (paren_expr
+                                                                                (paren_expr
+                                                                                  (paren_expr
+                                                                                    (paren_expr
+                                                                                      (paren_expr
+                                                                                        (paren_expr
+                                                                                          (paren_expr
+                                                                                            (paren_expr
+                                                                                              (paren_expr
+                                                                                                (paren_expr
+                                                                                                  (paren_expr
+                                                                                                    (paren_expr
+                                                                                                      (paren_expr
+                                                                                                        (paren_expr
+                                                                                                          (paren_expr
+                                                                                                            (paren_expr
+                                                                                                              (paren_expr
+                                                                                                                (paren_expr
+                                                                                                                  (paren_expr
+                                                                                                                    (paren_expr
+                                                                                                                      (paren_expr
+                                                                                                                        (paren_expr
+                                                                                                                          (paren_expr
+                                                                                                                            (paren_expr
+                                                                                                                              (paren_expr
+                                                                                                                                (paren_expr
+                                                                                                                                  (paren_expr
+                                                                                                                                    (paren_expr
+                                                                                                                                      (paren_expr
+                                                                                                                                        (paren_expr
+                                                                                                                                          (paren_expr
+                                                                                                                                            (paren_expr
+                                                                                                                                              (paren_expr
+                                                                                                                                                (paren_expr
+                                                                                                                                                  (paren_expr
+                                                                                                                                                    (paren_expr
+                                                                                                                                                      (paren_expr
+                                                                                                                                                        (paren_expr
+                                                                                                                                                          (paren_expr
+                                                                                                                                                            (paren_expr
+                                                                                                                                                              (paren_expr
+                                                                                                                                                                (paren_expr
+                                                                                                                                                                  (paren_expr
+                                                                                                                                                                    (paren_expr
+                                                                                                                                                                      (paren_expr
+                                                                                                                                                                        (paren_expr
+                                                                                                                                                                          (paren_expr
+                                                                                                                                                                            (paren_expr
+                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                    (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                      (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                        (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                          (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                            (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                              (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                                (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                                  (paren_expr
+                                                                                                                                                                                                                                                                                                                                                                                                                    (var_expr
+                                                                                                                                                                                                                                                                                                                                                                                                                      (lower))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))

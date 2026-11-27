@@ -113,6 +113,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -249,6 +253,10 @@
         },
         {
           "type": "list_expr",
+          "named": true
+        },
+        {
+          "type": "match_expr",
           "named": true
         },
         {
@@ -1117,6 +1125,135 @@
     }
   },
   {
+    "type": "data_constructor",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "?",
+            "named": false
+          },
+          {
+            "type": "[",
+            "named": false
+          },
+          {
+            "type": "]",
+            "named": false
+          },
+          {
+            "type": "apply_type",
+            "named": true
+          },
+          {
+            "type": "effect_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "labeled_type",
+            "named": true
+          },
+          {
+            "type": "list_type",
+            "named": true
+          },
+          {
+            "type": "lower",
+            "named": true
+          },
+          {
+            "type": "nat_add_type",
+            "named": true
+          },
+          {
+            "type": "nat_mul_type",
+            "named": true
+          },
+          {
+            "type": "optional_type",
+            "named": true
+          },
+          {
+            "type": "paren_type",
+            "named": true
+          },
+          {
+            "type": "record_type",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tick_list_type",
+            "named": true
+          },
+          {
+            "type": "tuple_type",
+            "named": true
+          },
+          {
+            "type": "unit_type",
+            "named": true
+          },
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "data_ctors",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "data_constructor",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "declaration",
     "named": true,
     "fields": {
@@ -1194,6 +1331,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -1379,6 +1520,22 @@
     }
   },
   {
+    "type": "deriving_clause",
+    "named": true,
+    "fields": {
+      "class": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "upper",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "do_bind",
     "named": true,
     "fields": {
@@ -1459,6 +1616,10 @@
             "named": true
           },
           {
+            "type": "match_expr",
+            "named": true
+          },
+          {
             "type": "nan",
             "named": true
           },
@@ -1516,6 +1677,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "apply_expr",
+            "named": true
+          },
           {
             "type": "as_expr",
             "named": true
@@ -1705,6 +1870,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -1822,10 +1991,6 @@
         },
         {
           "type": "effect_row",
-          "named": true
-        },
-        {
-          "type": "effect_type",
           "named": true
         },
         {
@@ -2266,6 +2431,10 @@
             "named": true
           },
           {
+            "type": "match_expr",
+            "named": true
+          },
+          {
             "type": "nan",
             "named": true
           },
@@ -2393,6 +2562,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -2529,6 +2702,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -2675,6 +2852,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -3065,6 +3246,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -3135,6 +3320,21 @@
     }
   },
   {
+    "type": "instance_context",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "instance_decl",
     "named": true,
     "fields": {},
@@ -3152,6 +3352,10 @@
         },
         {
           "type": "inline_source_decl",
+          "named": true
+        },
+        {
+          "type": "instance_context",
           "named": true
         },
         {
@@ -3321,6 +3525,10 @@
         },
         {
           "type": "list_expr",
+          "named": true
+        },
+        {
+          "type": "match_expr",
           "named": true
         },
         {
@@ -3543,6 +3751,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -3784,6 +3996,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -3923,6 +4139,10 @@
             "named": true
           },
           {
+            "type": "match_expr",
+            "named": true
+          },
+          {
             "type": "nan",
             "named": true
           },
@@ -4050,6 +4270,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -4309,6 +4533,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -4444,6 +4672,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -4572,6 +4804,136 @@
         },
         {
           "type": "upper",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "match_expr",
+    "named": true,
+    "fields": {
+      "scrutinee": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "apply_expr",
+            "named": true
+          },
+          {
+            "type": "as_expr",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "do_expr",
+            "named": true
+          },
+          {
+            "type": "float",
+            "named": true
+          },
+          {
+            "type": "force_expr",
+            "named": true
+          },
+          {
+            "type": "getter_expr",
+            "named": true
+          },
+          {
+            "type": "inf",
+            "named": true
+          },
+          {
+            "type": "infix_expr",
+            "named": true
+          },
+          {
+            "type": "integer",
+            "named": true
+          },
+          {
+            "type": "interp_string",
+            "named": true
+          },
+          {
+            "type": "intrinsic",
+            "named": true
+          },
+          {
+            "type": "left_section",
+            "named": true
+          },
+          {
+            "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "nan",
+            "named": true
+          },
+          {
+            "type": "neg_inf",
+            "named": true
+          },
+          {
+            "type": "negate_expr",
+            "named": true
+          },
+          {
+            "type": "null_expr",
+            "named": true
+          },
+          {
+            "type": "operator_section",
+            "named": true
+          },
+          {
+            "type": "paren_expr",
+            "named": true
+          },
+          {
+            "type": "record_expr",
+            "named": true
+          },
+          {
+            "type": "right_section",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          },
+          {
+            "type": "tuple_expr",
+            "named": true
+          },
+          {
+            "type": "unit_expr",
+            "named": true
+          },
+          {
+            "type": "var_expr",
+            "named": true
+          },
+          {
+            "type": "wildcard",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "pattern_clause",
           "named": true
         }
       ]
@@ -5233,10 +5595,6 @@
           "named": true
         },
         {
-          "type": "non_string_effect_type",
-          "named": true
-        },
-        {
           "type": "non_string_nat_add",
           "named": true
         },
@@ -5740,6 +6098,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -5954,6 +6316,10 @@
             "named": true
           },
           {
+            "type": "match_expr",
+            "named": true
+          },
+          {
             "type": "nan",
             "named": true
           },
@@ -6081,6 +6447,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -6373,6 +6743,10 @@
           },
           {
             "type": "list_expr",
+            "named": true
+          },
+          {
+            "type": "match_expr",
             "named": true
           },
           {
@@ -6931,6 +7305,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -7247,6 +7625,10 @@
           "named": true
         },
         {
+          "type": "match_expr",
+          "named": true
+        },
+        {
           "type": "nan",
           "named": true
         },
@@ -7379,6 +7761,10 @@
         },
         {
           "type": "list_expr",
+          "named": true
+        },
+        {
+          "type": "match_expr",
           "named": true
         },
         {
@@ -7563,6 +7949,14 @@
         },
         {
           "type": "concrete_rhs",
+          "named": true
+        },
+        {
+          "type": "data_ctors",
+          "named": true
+        },
+        {
+          "type": "deriving_clause",
           "named": true
         },
         {
@@ -7778,6 +8172,10 @@
         {
           "type": "lower",
           "named": true
+        },
+        {
+          "type": "upper",
+          "named": true
         }
       ]
     }
@@ -7883,6 +8281,10 @@
     "named": false
   },
   {
+    "type": "<>",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
@@ -7956,6 +8358,14 @@
     "extra": true
   },
   {
+    "type": "data",
+    "named": false
+  },
+  {
+    "type": "deriving",
+    "named": false
+  },
+  {
     "type": "do",
     "named": false
   },
@@ -8024,6 +8434,10 @@
   {
     "type": "lower",
     "named": true
+  },
+  {
+    "type": "match",
+    "named": false
   },
   {
     "type": "module",

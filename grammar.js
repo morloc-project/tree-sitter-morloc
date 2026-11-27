@@ -51,6 +51,7 @@ function t($) {
       semicolon: alias($._semicolon, ';'),
       plus: alias($._plus, '+'),
       slash: alias($._slash, '/'),
+      diamond: alias($._diamond, '<>'),
       inline: alias($._pragma_inline, '%inline'),
       kmodule: alias($._kw_module, 'module'),
       kimport: alias($._kw_import, 'import'),
@@ -62,6 +63,8 @@ function t($) {
       kfalse: alias($._kw_false, 'False'),
       ktype: alias($._kw_type, 'type'),
       knewtype: alias($._kw_newtype, 'newtype'),
+      kdata: alias($._kw_data, 'data'),
+      kderiving: alias($._kw_deriving, 'deriving'),
       krecord: alias($._kw_record, 'record'),
       kobject: alias($._kw_object, 'object'),
       kclass: alias($._kw_class, 'class'),
@@ -71,6 +74,7 @@ function t($) {
       kinfixl: alias($._kw_infixl, 'infixl'),
       kinfixr: alias($._kw_infixr, 'infixr'),
       kinfix: alias($._kw_infix, 'infix'),
+      kmatch: alias($._kw_match, 'match'),
       klet: alias($._kw_let, 'let'),
       kin: alias($._kw_in, 'in'),
       kdo: alias($._kw_do, 'do'),
@@ -144,6 +148,9 @@ module.exports = grammar({
     // 'export' is reserved by the lexer but reaches no production, so using
     // it as a name is an error, as it is in the compiler.
     $._kw_export,
+    $._kw_data,
+    $._kw_deriving,
+    $._kw_match,
     $._inf,
     $._neginf,
     $._nan,
@@ -151,6 +158,7 @@ module.exports = grammar({
     $.upper,
     $._plus,
     $._slash,
+    $._diamond,
     $.operator,
     $.integer,
     $.float,
@@ -337,8 +345,11 @@ module.exports = grammar({
       t($).rparen,
     ),
 
+    // `<>` is its own token, as it also opens an empty effect row, but as an
+    // operator it is spelled like any other.
     operator_name: $ => choice(
       $.operator,
+      alias($._diamond, $.operator),
       t($).plus,
       t($).star,
       t($).langle,
@@ -390,11 +401,25 @@ module.exports = grammar({
         t($).equals,
         $.concrete_rhs,
       ),
+      seq(
+        t($).kdata,
+        field('language', $._lang_token),
+        t($).fatarrow,
+        $.typedef_term,
+        t($).equals,
+        $.concrete_rhs,
+      ),
       seq(t($).ktype, $.typedef_term, optional(seq(t($).equals, $._type))),
-      seq(t($).knewtype, $.typedef_term, optional(seq(t($).equals, $._type))),
+      seq(
+        t($).knewtype,
+        $.typedef_term,
+        optional(seq(t($).equals, $._type, optional($.deriving_clause))),
+      ),
+      seq(t($).kdata, $.typedef_term, $.data_ctors, optional($.deriving_clause)),
       seq(
         $.nam_type,
         $.typedef_term,
+        optional($.deriving_clause),
         t($).kwhere,
         $._vlbrace,
         sepBy1($.nam_entry, $._vsemi),
@@ -411,6 +436,26 @@ module.exports = grammar({
     ),
 
     nam_type: $ => choice(t($).krecord, t($).kobject),
+
+    deriving_clause: $ => seq(
+      t($).kderiving,
+      choice(
+        field('class', $.upper),
+        seq(t($).lparen, sepBy1(field('class', $.upper), t($).comma), t($).rparen),
+      ),
+    ),
+
+    // Each constructor is introduced by the `=` or `|` before it.
+    data_ctors: $ => seq(
+      t($).equals,
+      $.data_constructor,
+      repeat(seq(t($).pipe, $.data_constructor)),
+    ),
+
+    data_constructor: $ => seq(
+      field('name', $.upper),
+      repeat(field('argument', $._nam_constructor_arg)),
+    ),
 
     _lang_token: $ => choice($.upper, $.lower),
 
@@ -473,10 +518,8 @@ module.exports = grammar({
     _non_fun_type: $ => choice($.effect_type, $._add_type),
 
     effect_type: $ => prec.right(seq(
-      t($).langle,
-      $.effect_row,
-      t($).rangle,
-      $._non_fun_type,
+      choice(seq(t($).langle, $.effect_row, t($).rangle), t($).diamond),
+      $._add_type,
     )),
 
     effect_row: $ => sepBy1(choice($.upper, $.lower), t($).comma),
@@ -561,10 +604,8 @@ module.exports = grammar({
     ),
 
     non_string_effect_type: $ => prec.right(seq(
-      t($).langle,
-      $.effect_row,
-      t($).rangle,
-      $._non_string_non_fun,
+      choice(seq(t($).langle, $.effect_row, t($).rangle), t($).diamond),
+      $._non_string_add,
     )),
 
     _non_string_add: $ => choice($.non_string_nat_add, $._non_string_mul),
@@ -638,6 +679,7 @@ module.exports = grammar({
 
     instance_decl: $ => seq(
       t($).kinstance,
+      optional($.instance_context),
       sepBy1($.instance_head, t($).comma),
       optional(seq(
         t($).kwhere,
@@ -645,6 +687,14 @@ module.exports = grammar({
         sepBy1($._instance_item, $._vsemi),
         $._vrbrace,
       )),
+    ),
+
+    instance_context: $ => seq(
+      choice(
+        $.constraint,
+        seq(t($).lparen, sepBy1($.constraint, t($).comma), t($).rparen),
+      ),
+      t($).fatarrow,
     ),
 
     instance_head: $ => seq(field('class', $.upper), repeat1($._atom_type)),
@@ -724,9 +774,18 @@ module.exports = grammar({
       $.let_expr,
       $.lambda_expr,
       $.guard_expr,
+      $.match_expr,
       $._infix_expr,
       $.annotation_expr,
     ),
+
+    // The scrutinee is an infix expression, so a let, lambda or guard there
+    // needs parentheses.
+    match_expr: $ => prec.right(seq(
+      t($).kmatch,
+      field('scrutinee', $._infix_expr),
+      repeat1($.pattern_clause),
+    )),
 
     annotation_expr: $ => prec.right(seq(
       $._infix_expr,
@@ -879,8 +938,9 @@ module.exports = grammar({
 
     _do_stmt: $ => choice($.do_bind, $.do_let, $._expr),
 
+    // `Ok x <- e` is a refutable bind: its left side is an application.
     do_bind: $ => seq(
-      field('name', $._atom_expr),
+      field('name', choice($._atom_expr, $.apply_expr)),
       t($).bind,
       field('body', $._expr),
     ),
@@ -939,9 +999,12 @@ module.exports = grammar({
     // Atoms
     //----------------------------------------------------------------
 
+    // An upper name in expression position is a data constructor.
     var_expr: $ => choice(
       seq($.lower, t($).nsdot, $.lower),
       $.lower,
+      seq($.lower, t($).nsdot, $.upper),
+      $.upper,
     ),
 
     boolean: $ => choice(t($).ktrue, t($).kfalse),

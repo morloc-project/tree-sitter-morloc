@@ -24,6 +24,40 @@ So this parser mirrors the compiler rather than approximating it:
 
 When the language moves, re-read those two compiler files and port the delta.
 
+## Usage
+
+Install the CLI with `npm install -g tree-sitter-cli` or
+`cargo install tree-sitter-cli`, or run `npx tree-sitter` from this repository,
+which carries a local copy.
+
+Print the parse tree of a file (run in this repository):
+
+```sh
+tree-sitter parse foo.loc                 # tree with [row, col] positions
+tree-sitter parse --cst foo.loc           # concrete tree, every token shown
+tree-sitter parse --quiet --stat *.loc    # report only ERROR or MISSING nodes
+```
+
+Highlighting needs the folder that contains this repository listed in the
+CLI's config:
+
+```sh
+tree-sitter init-config                   # writes ~/.config/tree-sitter/config.json
+```
+
+```json
+"parser-directories": ["/path/to/folder/containing/tree-sitter-morloc"]
+```
+
+Then highlight any `.loc` file, from any directory:
+
+```sh
+tree-sitter highlight foo.loc             # ANSI colours in the terminal
+tree-sitter highlight --html foo.loc > foo.html
+```
+
+Colours are set in the `theme` section of the same `config.json`.
+
 ## Verifying
 
 The compiler's golden test suite is the reference corpus. Every file it builds

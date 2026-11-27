@@ -266,3 +266,148 @@ record Empty = Empty
       (upper))
     (nam_constructor
       (upper))))
+
+============================================================
+data type with constructors
+============================================================
+
+data Shape = Circle Real | Rect Real Real
+
+---
+
+(source_file
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (data_ctors
+      (data_constructor
+        (upper)
+        (upper))
+      (data_constructor
+        (upper)
+        (upper)
+        (upper)))))
+
+============================================================
+data type with argument-free constructors
+============================================================
+
+data Color = Red | Green | Blue
+
+---
+
+(source_file
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (data_ctors
+      (data_constructor
+        (upper))
+      (data_constructor
+        (upper))
+      (data_constructor
+        (upper)))))
+
+============================================================
+parameterized data type
+============================================================
+
+data (Tree a) = Leaf | Node (Tree a) a (Tree a)
+
+---
+
+(source_file
+  (typedef_decl
+    (typedef_term
+      (upper)
+      (typedef_param
+        (lower)))
+    (data_ctors
+      (data_constructor
+        (upper))
+      (data_constructor
+        (upper)
+        (apply_type
+          (upper)
+          (lower))
+        (lower)
+        (apply_type
+          (upper)
+          (lower))))))
+
+============================================================
+data type deriving a class list
+============================================================
+
+data Color = Red | Blue deriving (Eq, Show)
+
+---
+
+(source_file
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (data_ctors
+      (data_constructor
+        (upper))
+      (data_constructor
+        (upper)))
+    (deriving_clause
+      (upper)
+      (upper))))
+
+============================================================
+data type bound to a native form
+============================================================
+
+data Cpp => Color = "color_t"
+
+---
+
+(source_file
+  (typedef_decl
+    (upper)
+    (typedef_term
+      (upper))
+    (concrete_rhs
+      (string))))
+
+============================================================
+newtype deriving a class
+============================================================
+
+newtype Age = Int deriving Eq
+
+---
+
+(source_file
+  (typedef_decl
+    (typedef_term
+      (upper))
+    (upper)
+    (deriving_clause
+      (upper))))
+
+============================================================
+record deriving before its fields
+============================================================
+
+record Person deriving Eq where
+  name :: Str
+  age :: Int
+
+---
+
+(source_file
+  (typedef_decl
+    (nam_type)
+    (typedef_term
+      (upper))
+    (deriving_clause
+      (upper))
+    (nam_entry
+      (lower)
+      (upper))
+    (nam_entry
+      (lower)
+      (upper))))

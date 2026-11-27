@@ -640,3 +640,110 @@ f = r.map
     (var_expr
       (lower)
       (lower))))
+
+============================================================
+match expression
+============================================================
+
+area s = match s
+  | Circle r = r
+  | Rect w h = w * h
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (match_expr
+      (var_expr
+        (lower))
+      (pattern_clause
+        (var_expr
+          (upper))
+        (var_expr
+          (lower))
+        (var_expr
+          (lower)))
+      (pattern_clause
+        (var_expr
+          (upper))
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))
+        (infix_expr
+          (var_expr
+            (lower))
+          (operator_name)
+          (var_expr
+            (lower)))))))
+
+============================================================
+constructors in expressions
+============================================================
+
+f = g Red p.Blue
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (var_expr
+        (lower))
+      (var_expr
+        (upper))
+      (var_expr
+        (lower)
+        (upper)))))
+
+============================================================
+refutable bind
+============================================================
+
+f = do
+  Ok y <- foo
+  bar y
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (do_expr
+      (do_bind
+        (apply_expr
+          (var_expr
+            (upper))
+          (var_expr
+            (lower)))
+        (var_expr
+          (lower)))
+      (apply_expr
+        (var_expr
+          (lower))
+        (var_expr
+          (lower))))))
+
+============================================================
+diamond operator
+============================================================
+
+f = (<>) a b
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (apply_expr
+      (operator_section
+        (operator_name
+          (operator)))
+      (var_expr
+        (lower))
+      (var_expr
+        (lower)))))

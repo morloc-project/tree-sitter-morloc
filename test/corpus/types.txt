@@ -299,3 +299,23 @@ f :: Vector 4 Int
           (upper)
           (integer))
         (upper)))))
+
+============================================================
+empty effect row
+============================================================
+
+f :: <> Int -> <IO> Int
+
+---
+
+(source_file
+  (signature
+    (lower)
+    (sig_type
+      (function_type
+        (effect_type
+          (upper))
+        (effect_type
+          (effect_row
+            (upper))
+          (upper))))))

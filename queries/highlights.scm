@@ -36,6 +36,9 @@
 (typedef_term name: (upper) @type.definition)
 (constraint class: (upper) @type)
 (instance_head class: (upper) @type)
+(deriving_clause class: (upper) @type)
+(data_constructor name: (upper) @constructor)
+(var_expr (upper) @constructor)
 (effect_decl (upper) @type.definition)
 (effect_row (upper) @attribute)
 (source_decl language: (_) @type.builtin)
@@ -83,6 +86,8 @@
 [
   "type"
   "newtype"
+  "data"
+  "deriving"
   "record"
   "object"
 ] @keyword.type
@@ -103,6 +108,7 @@
   "let"
   "in"
   "do"
+  "match"
 ] @keyword
 
 ; Operators and punctuation
@@ -140,4 +146,5 @@
   "}"
   "<"
   ">"
+  "<>"
 ] @punctuation.bracket

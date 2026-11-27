@@ -71,6 +71,9 @@ enum TokenType {
   KW_DO,
   KW_NULL,
   KW_EXPORT,
+  KW_DATA,
+  KW_DERIVING,
+  KW_MATCH,
   TOK_INF,
   TOK_NEGINF,
   TOK_NAN,
@@ -78,6 +81,7 @@ enum TokenType {
   UPPER,
   PLUS,
   SLASH,
+  DIAMOND,
   OPERATOR,
   INTEGER,
   FLOAT,
@@ -102,9 +106,14 @@ enum TokenType {
 #define TOK_OTHER 251
 #define TOK_NONE 252
 
-#define MAX_CTX 96
-#define MAX_BRK 96
+// Bounds that keep the serialized state within
+// TREE_SITTER_SERIALIZATION_BUFFER_SIZE: at most 2 bytes per context, 4
+// bracket kinds per byte, 3 bytes per string. Past them the scanner stops,
+// so the rest of the file is an error rather than laid out wrongly.
+#define MAX_CTX 400
+#define MAX_BRK 400
 #define MAX_STR 8
+#define MAX_COL 0x3FFF
 
 // LayoutContext
 #define CTX_INDENT 0
@@ -142,12 +151,12 @@ enum TokenType {
 typedef struct {
   uint8_t ctx_kind[MAX_CTX];
   uint16_t ctx_col[MAX_CTX];
-  uint8_t ctx_len;
+  uint16_t ctx_len;
 
   // Per-open-delimiter flag: BRK_SLICE when a '[' opened a slice bracket,
   // BRK_GROUP when a '(' opened a group accessor.
   uint8_t brk[MAX_BRK];
-  uint8_t brk_len;
+  uint16_t brk_len;
 
   uint8_t str_mode[MAX_STR];
   uint16_t str_depth[MAX_STR];
@@ -163,6 +172,10 @@ typedef struct {
   uint8_t prev_tok;
   uint8_t prev2_tok;
   uint8_t closed_group;
+  // Set after 'do' when a record literal follows it (LEX-4).
+  uint8_t do_record;
+  // Set when a bound above was exceeded.
+  uint8_t overflow;
 } Scanner;
 
 typedef struct {
@@ -178,10 +191,73 @@ typedef struct {
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 static void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
 
-static bool is_lower(int32_t c) { return c >= 'a' && c <= 'z'; }
-static bool is_upper(int32_t c) { return c >= 'A' && c <= 'Z'; }
 static bool is_digit(int32_t c) { return c >= '0' && c <= '9'; }
-static bool is_alpha(int32_t c) { return is_lower(c) || is_upper(c); }
+
+// The compiler classifies characters with Data.Char, which knows all of
+// Unicode. Outside ASCII these tables cover the cased letters of Latin,
+// Greek, Cyrillic and Armenian; any other character outside the symbol,
+// punctuation and combining blocks listed in is_letter_u is an uncased
+// letter, which the compiler reads as part of a lower name.
+static bool in(int32_t c, int32_t lo, int32_t hi) { return c >= lo && c <= hi; }
+
+// Within a block of case pairs, the upper letter is at the even code point
+// (or the odd one, when `odd_upper`).
+static bool paired_upper(int32_t c, bool odd_upper) {
+  return ((c & 1) == 1) == odd_upper;
+}
+
+static bool is_upper_u(int32_t c) {
+  if (in(c, 0xC0, 0xD6) || in(c, 0xD8, 0xDE)) return true;
+  if (in(c, 0x100, 0x137) || in(c, 0x14A, 0x177)) return paired_upper(c, false);
+  if (in(c, 0x139, 0x148) || in(c, 0x179, 0x17E)) return paired_upper(c, true);
+  if (c == 0x178) return true;
+  if (in(c, 0x200, 0x24F)) return paired_upper(c, false);
+  if (c == 0x386 || in(c, 0x388, 0x38A) || c == 0x38C || in(c, 0x38E, 0x38F) ||
+      in(c, 0x391, 0x3A1) || in(c, 0x3A3, 0x3AB)) {
+    return true;
+  }
+  if (in(c, 0x400, 0x42F)) return true;
+  if (in(c, 0x460, 0x481) || in(c, 0x48A, 0x4BF)) return paired_upper(c, false);
+  if (in(c, 0x531, 0x556)) return true;
+  if (in(c, 0x1E00, 0x1EFF)) return paired_upper(c, false);
+  if (in(c, 0xFF21, 0xFF3A)) return true;
+  return false;
+}
+
+static bool is_letter_u(int32_t c) {
+  if (c < 0xAA) return false;
+  if (in(c, 0xAB, 0xB4) || in(c, 0xB6, 0xB9) || in(c, 0xBB, 0xBF)) return false;
+  if (c == 0xD7 || c == 0xF7) return false;
+  if (in(c, 0x300, 0x36F)) return false;
+  if (in(c, 0x2000, 0x2BFF) || in(c, 0x2E00, 0x2E7F)) return false;
+  if (in(c, 0x3000, 0x3003) || in(c, 0x3008, 0x3020)) return false;
+  if (in(c, 0xFE00, 0xFE4F) || in(c, 0xFF00, 0xFF0F) || in(c, 0xFF1A, 0xFF20) ||
+      in(c, 0xFF3B, 0xFF40) || in(c, 0xFF5B, 0xFF65) || in(c, 0xFFF0, 0xFFFF)) {
+    return false;
+  }
+  if (in(c, 0x1F000, 0x1FAFF)) return false;
+  return true;
+}
+
+static bool is_cased_u(int32_t c) {
+  return in(c, 0xC0, 0x24F) || in(c, 0x370, 0x3FF) || in(c, 0x400, 0x52F) ||
+         in(c, 0x531, 0x587) || in(c, 0x1E00, 0x1EFF) || in(c, 0xFF21, 0xFF5A) ||
+         c == 0xAA || c == 0xB5 || c == 0xBA;
+}
+
+// isUpper, isLower, isAlpha
+static bool is_upper(int32_t c) {
+  if (c < 0x80) return c >= 'A' && c <= 'Z';
+  return is_upper_u(c);
+}
+static bool is_lower(int32_t c) {
+  if (c < 0x80) return c >= 'a' && c <= 'z';
+  return is_letter_u(c) && is_cased_u(c) && !is_upper_u(c);
+}
+static bool is_alpha(int32_t c) {
+  if (c < 0x80) return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+  return is_letter_u(c);
+}
 static bool is_alnum(int32_t c) { return is_alpha(c) || is_digit(c); }
 static bool is_hex(int32_t c) {
   return is_digit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
@@ -230,11 +306,13 @@ static bool is_block_closer(uint8_t k) {
 static bool is_getter_dot(uint8_t k) { return k == GDOT || k == GDOTCHAIN; }
 
 static void ctx_push(Scanner *s, uint8_t kind, uint16_t col) {
-  if (s->ctx_len < MAX_CTX) {
-    s->ctx_kind[s->ctx_len] = kind;
-    s->ctx_col[s->ctx_len] = col;
-    s->ctx_len++;
+  if (s->ctx_len >= MAX_CTX || col > MAX_COL) {
+    s->overflow = 1;
+    return;
   }
+  s->ctx_kind[s->ctx_len] = kind;
+  s->ctx_col[s->ctx_len] = col;
+  s->ctx_len++;
 }
 
 static void ctx_pop(Scanner *s) {
@@ -242,14 +320,18 @@ static void ctx_pop(Scanner *s) {
 }
 
 static bool has_paren_ctx(const Scanner *s) {
-  for (uint8_t i = 0; i < s->ctx_len; i++) {
+  for (uint16_t i = 0; i < s->ctx_len; i++) {
     if (s->ctx_kind[i] == CTX_PAREN) return true;
   }
   return false;
 }
 
 static void brk_push(Scanner *s, uint8_t slice) {
-  if (s->brk_len < MAX_BRK) s->brk[s->brk_len++] = slice;
+  if (s->brk_len < MAX_BRK) {
+    s->brk[s->brk_len++] = slice;
+  } else {
+    s->overflow = 1;
+  }
 }
 
 static void brk_pop(Scanner *s) {
@@ -264,7 +346,8 @@ static bool in_slice_bracket(const Scanner *s) {
 // Word and operator classification
 //--------------------------------------------------------------------
 
-// classifyWord
+// classifyWord, for the ASCII letters of a word; the case of its first
+// letter is decided by the caller.
 static uint8_t classify_word(const char *w, uint32_t n) {
   switch (n) {
     case 2:
@@ -282,12 +365,14 @@ static uint8_t classify_word(const char *w, uint32_t n) {
       if (!memcmp(w, "True", 4)) return KW_TRUE;
       if (!memcmp(w, "type", 4)) return KW_TYPE;
       if (!memcmp(w, "Null", 4)) return KW_NULL;
+      if (!memcmp(w, "data", 4)) return KW_DATA;
       break;
     case 5:
       if (!memcmp(w, "where", 5)) return KW_WHERE;
       if (!memcmp(w, "False", 5)) return KW_FALSE;
       if (!memcmp(w, "class", 5)) return KW_CLASS;
       if (!memcmp(w, "infix", 5)) return KW_INFIX;
+      if (!memcmp(w, "match", 5)) return KW_MATCH;
       break;
     case 6:
       if (!memcmp(w, "module", 6)) return KW_MODULE;
@@ -305,6 +390,7 @@ static uint8_t classify_word(const char *w, uint32_t n) {
       break;
     case 8:
       if (!memcmp(w, "instance", 8)) return KW_INSTANCE;
+      if (!memcmp(w, "deriving", 8)) return KW_DERIVING;
       break;
     case 9:
       if (!memcmp(w, "escapable", 9)) return KW_ESCAPABLE;
@@ -312,8 +398,26 @@ static uint8_t classify_word(const char *w, uint32_t n) {
     default:
       break;
   }
-  if (n > 0 && is_upper((int32_t)w[0])) return UPPER;
   return LOWER;
+}
+
+// Consume an identifier, whose first character (a letter or '_') is the
+// lookahead, and classify it.
+static uint8_t read_word(TSLexer *lexer) {
+  int32_t first = lexer->lookahead;
+  char word[16];
+  uint32_t n = 0;
+  do {
+    int32_t ch = lexer->lookahead;
+    // Keywords are ASCII; any other character makes the word a name.
+    if (n < sizeof(word)) word[n] = (ch < 0x80) ? (char)ch : 0;
+    n++;
+    advance(lexer);
+  } while (is_ident_body(lexer->lookahead));
+  if (n == 1 && first == '_') return UNDERSCORE;
+  uint8_t kind = (n <= sizeof(word)) ? classify_word(word, n) : LOWER;
+  if (kind == LOWER && is_upper(first)) return UPPER;
+  return kind;
 }
 
 // classifyOp, plus the '+' and '/' operators the parser matches by text.
@@ -337,6 +441,7 @@ static uint8_t classify_op(const char *op, uint32_t n) {
     if (!memcmp(op, "->", 2)) return ARROW;
     if (!memcmp(op, "=>", 2)) return FATARROW;
     if (!memcmp(op, "<-", 2)) return BIND;
+    if (!memcmp(op, "<>", 2)) return DIAMOND;
   }
   return OPERATOR;
 }
@@ -637,8 +742,9 @@ static uint8_t lex_full(Scanner *s, TSLexer *lexer, Tok *t) {
       return glued ? GDOTCHAIN : GDOT;
     }
     // A dot glued to a lowercase name is a namespace separator, unless that
-    // name was itself reached through a getter dot.
-    if (is_lower(next) && glued && s->prev_tok == LOWER &&
+    // name was itself reached through a getter dot. Its tail is a term
+    // (`f.map`) or a constructor (`p.Red`).
+    if (is_alpha(next) && glued && s->prev_tok == LOWER &&
         !is_getter_dot(s->prev2_tok)) {
       lexer->mark_end(lexer);
       return NSDOT;
@@ -726,17 +832,9 @@ static uint8_t lex_full(Scanner *s, TSLexer *lexer, Tok *t) {
   }
 
   if (is_alpha(c) || c == '_') {
-    char word[16];
-    uint32_t n = 0;
-    do {
-      if (n < sizeof(word)) word[n] = (char)lexer->lookahead;
-      n++;
-      advance(lexer);
-    } while (is_ident_body(lexer->lookahead));
+    uint8_t kind = read_word(lexer);
     lexer->mark_end(lexer);
-    if (n == 1 && word[0] == '_') return UNDERSCORE;
-    if (n <= sizeof(word)) return classify_word(word, n);
-    return is_upper((int32_t)word[0]) ? UPPER : LOWER;
+    return kind;
   }
 
   // Unknown character: consume it so the parser reports an error and the
@@ -783,6 +881,8 @@ static void commit(Scanner *s, uint8_t kind, uint8_t aux) {
         s->str_mode[s->str_len] = aux;
         s->str_depth[s->str_len] = 0;
         s->str_len++;
+      } else {
+        s->overflow = 1;
       }
       s->str_state = STR_EXPECT_INTERP;
       break;
@@ -792,9 +892,11 @@ static void commit(Scanner *s, uint8_t kind, uint8_t aux) {
     case INTERPOPEN:
       s->str_state = STR_NONE;
       if (s->str_len > 0) s->str_depth[s->str_len - 1] = 0;
+      brk_push(s, BRK_PLAIN);
       break;
     case INTERPCLOSE:
       s->str_state = STR_BODY;
+      brk_pop(s);
       break;
     case STREND:
       if (s->str_len > 0) s->str_len--;
@@ -817,6 +919,7 @@ static void commit(Scanner *s, uint8_t kind, uint8_t aux) {
 typedef struct {
   Scanner *s;
   TSLexer *lexer;
+  const bool *valid;
   Tok tok;
 } Ctx;
 
@@ -833,6 +936,39 @@ static bool emit_real(Ctx *c) {
   commit(c->s, kind, c->tok.aux);
   c->lexer->result_symbol = kind;
   return true;
+}
+
+// recordLiteralAhead: after 'do', '{' then a lowercase name and '='. The
+// token before has been marked, so the look ahead consumes nothing.
+static bool record_literal_ahead(TSLexer *lexer) {
+  for (;;) {
+    int32_t ch = lexer->lookahead;
+    if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+      advance(lexer);
+    } else {
+      break;
+    }
+  }
+  if (lexer->lookahead != '{') return false;
+  advance(lexer);
+  if (lexer->lookahead == '-') return false;
+  for (;;) {
+    int32_t ch = lexer->lookahead;
+    if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+      advance(lexer);
+    } else {
+      break;
+    }
+  }
+  if (!is_alpha(lexer->lookahead) && lexer->lookahead != '_') return false;
+  if (read_word(lexer) != LOWER) return false;
+  while (lexer->lookahead == ' ' || lexer->lookahead == '\t' ||
+         lexer->lookahead == '\r' || lexer->lookahead == '\n') {
+    advance(lexer);
+  }
+  if (lexer->lookahead != '=') return false;
+  advance(lexer);
+  return !is_op_char(lexer->lookahead);
 }
 
 // closingBraces
@@ -856,8 +992,11 @@ static bool close_to_explicit(Ctx *c);
 static bool emit_token(Ctx *c) {
   Scanner *s = c->s;
   if (c->tok.kind == TOK_EOF) return close_all(c);
-  // An explicit '}' closes every layout block opened inside its '{'.
-  if (c->tok.kind == RBRACE) return close_to_explicit(c);
+  // An explicit '}' closes every layout block opened inside its '{', as the
+  // '}' ending a string's hole closes every block opened inside the hole.
+  if (c->tok.kind == RBRACE || c->tok.kind == INTERPCLOSE) {
+    return close_to_explicit(c);
+  }
 
   uint16_t col = c->tok.col;
   emit_real(c);
@@ -867,13 +1006,18 @@ static bool emit_token(Ctx *c) {
     case KW_MODULE:
       s->mode = MODE_MODULE_HEADER;
       break;
-    case KW_WHERE:
     case KW_DO:
+      s->do_record = record_literal_ahead(c->lexer);
+      s->mode = MODE_START_CTX;
+      s->start_kw = kind;
+      break;
+    case KW_WHERE:
     case KW_LET:
       s->mode = MODE_START_CTX;
       s->start_kw = kind;
       break;
     case LBRACE:
+    case INTERPOPEN:
       ctx_push(s, CTX_EXPLICIT, col);
       break;
     case LPAREN:
@@ -968,7 +1112,17 @@ static bool indent_check(Ctx *c) {
     c->lexer->result_symbol = VSEMI;
     return true;
   }
-  if (c->tok.col > n) return emit_token(c);
+  if (c->tok.col > n) {
+    // LEX-4: an implicit block other than the module body ends before a
+    // token that cannot continue it.
+    if (s->ctx_len >= 2 && c->tok.kind != TOK_OTHER && c->tok.kind != TOK_EOF &&
+        c->valid[VRBRACE] && !c->valid[c->tok.kind]) {
+      ctx_pop(s);
+      c->lexer->result_symbol = VRBRACE;
+      return true;
+    }
+    return emit_token(c);
+  }
   ctx_pop(s);
   c->lexer->result_symbol = VRBRACE;
   return true;
@@ -977,8 +1131,11 @@ static bool indent_check(Ctx *c) {
 // startLayoutCtx
 static bool start_layout_ctx(Ctx *c) {
   Scanner *s = c->s;
-  // An explicit brace after a layout keyword opens a non-indented block.
-  if (c->tok.kind == LBRACE) {
+  // An explicit brace after a layout keyword opens a non-indented block,
+  // unless it opens a record literal after 'do' (LEX-4).
+  bool do_record = s->start_kw == KW_DO && s->do_record;
+  s->do_record = 0;
+  if (c->tok.kind == LBRACE && !do_record) {
     s->mode = MODE_NORMAL;
     uint16_t col = c->tok.col;
     emit_real(c);
@@ -1005,13 +1162,13 @@ bool tree_sitter_morloc_external_scanner_scan(void *payload, TSLexer *lexer,
   Scanner *s = (Scanner *)payload;
   // Every token comes from this scanner, so the parser's expectations never
   // change what is lexed; an unexpected token is reported by the parser.
-  (void)valid_symbols;
-
-  if (s->mode == MODE_DONE) return false;
+  // They decide only where an indented block ends early (LEX-4).
+  if (s->mode == MODE_DONE || s->overflow) return false;
 
   Ctx c;
   c.s = s;
   c.lexer = lexer;
+  c.valid = valid_symbols;
   c.tok.kind = TOK_OTHER;
   c.tok.aux = 0;
   c.tok.pre = 0;
@@ -1034,7 +1191,12 @@ bool tree_sitter_morloc_external_scanner_scan(void *payload, TSLexer *lexer,
   lexer->mark_end(lexer);
   c.tok.col = (uint16_t)lexer->get_column(lexer);
 
-  if (s->str_state == STR_NONE) {
+  if (s->str_state == STR_EXPECT_INTERP) {
+    c.tok.kind = INTERPOPEN;
+  } else if (s->str_state == STR_BODY) {
+    // The rest of a string after a hole; lex_full decides mid or end.
+    c.tok.kind = STRMID;
+  } else {
     int32_t ch = lexer->lookahead;
     if (ch == 0) {
       c.tok.kind = TOK_EOF;
@@ -1103,7 +1265,7 @@ bool tree_sitter_morloc_external_scanner_scan(void *payload, TSLexer *lexer,
           // The '}' that ends an interpolation splice is its own token, not
           // a layout brace.
           c.tok.kind = (s->str_len > 0 && s->str_depth[s->str_len - 1] == 0)
-                           ? TOK_OTHER
+                           ? INTERPCLOSE
                            : RBRACE;
           break;
         default: c.tok.kind = TOK_OTHER; break;
@@ -1112,21 +1274,21 @@ bool tree_sitter_morloc_external_scanner_scan(void *payload, TSLexer *lexer,
       // recognise. Their extent is exact, so consuming one here cannot
       // disturb the anchor a virtual token needs.
       if (is_alpha(ch) || ch == '_') {
-        char word[16];
+        c.tok.kind = read_word(lexer);
+        c.tok.consumed = true;
+      } else if (is_op_char(ch) && ch != '.' && ch != '!' && ch != '?' &&
+                 ch != '%' && ch != '@' && ch != '\\' &&
+                 !(ch == ':' && in_slice_bracket(s))) {
+        // A plain operator run, classified so the layout pass knows it.
+        char op[4];
         uint32_t n = 0;
-        do {
-          if (n < sizeof(word)) word[n] = (char)lexer->lookahead;
+        while (is_op_char(lexer->lookahead)) {
+          if (n < sizeof(op)) op[n] = (char)lexer->lookahead;
           n++;
           advance(lexer);
-        } while (is_ident_body(lexer->lookahead));
-        c.tok.consumed = true;
-        if (n == 1 && word[0] == '_') {
-          c.tok.kind = UNDERSCORE;
-        } else if (n <= sizeof(word)) {
-          c.tok.kind = classify_word(word, n);
-        } else {
-          c.tok.kind = is_upper((int32_t)word[0]) ? UPPER : LOWER;
         }
+        c.tok.consumed = true;
+        c.tok.kind = n <= sizeof(op) ? classify_op(op, n) : OPERATOR;
       }
     }
   }
@@ -1182,6 +1344,10 @@ bool tree_sitter_morloc_external_scanner_scan(void *payload, TSLexer *lexer,
     return emit_token(&c);
   }
   if (c.tok.kind == TOK_EOF) return close_all(&c);
+  // A string's hole is an explicit block, and the rest of the string after
+  // it continues the string whatever its column.
+  if (c.tok.kind == INTERPCLOSE) return close_to_explicit(&c);
+  if (c.tok.kind == INTERPOPEN || c.tok.kind == STRMID) return emit_token(&c);
   // A closing bracket force-closes any layout block opened inside it.
   if ((c.tok.kind == RPAREN || c.tok.kind == RBRACKET) && has_paren_ctx(s)) {
     return close_to_paren(&c);
@@ -1211,20 +1377,32 @@ void tree_sitter_morloc_external_scanner_destroy(void *payload) {
   free(payload);
 }
 
+// A context is one byte, its kind in the top two bits; an indentation
+// context adds the low byte of its column to the six high bits held there.
 unsigned tree_sitter_morloc_external_scanner_serialize(void *payload,
                                                        char *buffer) {
   Scanner *s = (Scanner *)payload;
   unsigned i = 0;
 
-  buffer[i++] = (char)s->ctx_len;
-  for (uint8_t j = 0; j < s->ctx_len; j++) {
-    buffer[i++] = (char)s->ctx_kind[j];
-    buffer[i++] = (char)(s->ctx_col[j] & 0xFF);
-    buffer[i++] = (char)((s->ctx_col[j] >> 8) & 0xFF);
+  buffer[i++] = (char)(s->ctx_len & 0xFF);
+  buffer[i++] = (char)(s->ctx_len >> 8);
+  for (uint16_t j = 0; j < s->ctx_len; j++) {
+    uint8_t k = s->ctx_kind[j];
+    if (k == CTX_INDENT || k == CTX_LET) {
+      buffer[i++] = (char)((k << 6) | ((s->ctx_col[j] >> 8) & 0x3F));
+      buffer[i++] = (char)(s->ctx_col[j] & 0xFF);
+    } else {
+      buffer[i++] = (char)(k << 6);
+    }
   }
-  buffer[i++] = (char)s->brk_len;
-  for (uint8_t j = 0; j < s->brk_len; j++) {
-    buffer[i++] = (char)s->brk[j];
+  buffer[i++] = (char)(s->brk_len & 0xFF);
+  buffer[i++] = (char)(s->brk_len >> 8);
+  for (uint16_t j = 0; j < s->brk_len; j += 4) {
+    uint8_t b = 0;
+    for (uint16_t q = 0; q < 4 && j + q < s->brk_len; q++) {
+      b |= (uint8_t)(s->brk[j + q] << (2 * q));
+    }
+    buffer[i++] = (char)b;
   }
   buffer[i++] = (char)s->str_len;
   for (uint8_t j = 0; j < s->str_len; j++) {
@@ -1243,6 +1421,8 @@ unsigned tree_sitter_morloc_external_scanner_serialize(void *payload,
   buffer[i++] = (char)s->prev_tok;
   buffer[i++] = (char)s->prev2_tok;
   buffer[i++] = (char)s->closed_group;
+  buffer[i++] = (char)s->do_record;
+  buffer[i++] = (char)s->overflow;
   return i;
 }
 
@@ -1254,18 +1434,26 @@ void tree_sitter_morloc_external_scanner_deserialize(void *payload,
   if (length == 0) return;
 
   unsigned i = 0;
-  s->ctx_len = (uint8_t)buffer[i++];
-  if (s->ctx_len > MAX_CTX) s->ctx_len = MAX_CTX;
-  for (uint8_t j = 0; j < s->ctx_len; j++) {
-    s->ctx_kind[j] = (uint8_t)buffer[i++];
-    uint16_t lo = (uint8_t)buffer[i++];
-    uint16_t hi = (uint8_t)buffer[i++];
-    s->ctx_col[j] = (uint16_t)(lo | (hi << 8));
+  uint16_t ctx_len = (uint16_t)((uint8_t)buffer[i] | ((uint8_t)buffer[i + 1] << 8));
+  i += 2;
+  s->ctx_len = ctx_len > MAX_CTX ? MAX_CTX : ctx_len;
+  for (uint16_t j = 0; j < s->ctx_len; j++) {
+    uint8_t b = (uint8_t)buffer[i++];
+    uint8_t k = b >> 6;
+    s->ctx_kind[j] = k;
+    s->ctx_col[j] = 0;
+    if (k == CTX_INDENT || k == CTX_LET) {
+      s->ctx_col[j] = (uint16_t)(((b & 0x3F) << 8) | (uint8_t)buffer[i++]);
+    }
   }
-  s->brk_len = (uint8_t)buffer[i++];
-  if (s->brk_len > MAX_BRK) s->brk_len = MAX_BRK;
-  for (uint8_t j = 0; j < s->brk_len; j++) {
-    s->brk[j] = (uint8_t)buffer[i++];
+  uint16_t brk_len = (uint16_t)((uint8_t)buffer[i] | ((uint8_t)buffer[i + 1] << 8));
+  i += 2;
+  s->brk_len = brk_len > MAX_BRK ? MAX_BRK : brk_len;
+  for (uint16_t j = 0; j < s->brk_len; j += 4) {
+    uint8_t b = (uint8_t)buffer[i++];
+    for (uint16_t q = 0; q < 4 && j + q < s->brk_len; q++) {
+      s->brk[j + q] = (uint8_t)((b >> (2 * q)) & 0x3);
+    }
   }
   s->str_len = (uint8_t)buffer[i++];
   if (s->str_len > MAX_STR) s->str_len = MAX_STR;
@@ -1287,4 +1475,6 @@ void tree_sitter_morloc_external_scanner_deserialize(void *payload,
   s->prev_tok = (uint8_t)buffer[i++];
   s->prev2_tok = (uint8_t)buffer[i++];
   s->closed_group = (uint8_t)buffer[i++];
+  s->do_record = (uint8_t)buffer[i++];
+  s->overflow = (uint8_t)buffer[i++];
 }

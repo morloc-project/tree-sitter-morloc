@@ -194,3 +194,50 @@ escapable effect Err
 (source_file
   (effect_decl
     (upper)))
+
+============================================================
+instance with a context
+============================================================
+
+instance Eq a => Eq [a]
+
+---
+
+(source_file
+  (instance_decl
+    (instance_context
+      (constraint
+        (upper)
+        (lower)))
+    (instance_head
+      (upper)
+      (list_type
+        (lower)))))
+
+============================================================
+instance with a context list
+============================================================
+
+instance (Eq a, Eq b) => Eq (a, b) where
+  eq = foo
+
+---
+
+(source_file
+  (instance_decl
+    (instance_context
+      (constraint
+        (upper)
+        (lower))
+      (constraint
+        (upper)
+        (lower)))
+    (instance_head
+      (upper)
+      (tuple_type
+        (lower)
+        (lower)))
+    (declaration
+      (lower)
+      (var_expr
+        (lower)))))

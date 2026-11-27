@@ -21,7 +21,7 @@ if [ -x node_modules/.bin/tree-sitter ]; then
 fi
 
 if [ $# -eq 0 ]; then
-    set -- ../../compiler/morloc/test-suite/golden-tests
+    set -- ../../compiler/morloc/test-suite/golden
 fi
 
 for dir in "$@"; do

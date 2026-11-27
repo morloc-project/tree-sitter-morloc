@@ -1,0 +1,35 @@
+============================================================
+non-ascii names
+============================================================
+
+make x = { grün = x, 名前 = Ärger }
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (var_expr
+      (lower))
+    (record_expr
+      (record_entry
+        (lower)
+        (var_expr
+          (lower)))
+      (record_entry
+        (lower)
+        (var_expr
+          (upper))))))
+
+============================================================
+non-ascii letters never form a keyword
+============================================================
+
+datš = 1
+
+---
+
+(source_file
+  (declaration
+    (lower)
+    (integer)))
